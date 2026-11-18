@@ -1,0 +1,55 @@
+---
+pagination:
+  data: site.news
+  size: 1
+  alias: item
+permalink: "{{ item.url }}"
+---
+{% extends "base.njk" %}
+{% set current = 'news' %}
+{% set pageTitle = item.title %}
+{% set crumbs = [['/', 'Home'], ['/news/', 'News'], [false, item.title]] %}
+{% block content %}
+<article>
+  <section class="osi-wrap osi-pagehead osi-pagehead--tight">
+    <div class="osi-card__meta osi-card__meta--start">
+      <time datetime="{{ item.date }}">{{ item.dateText }}</time>
+{%- for label in item.labels %}
+      <a class="osi-card__cat" href="/news/label/{{ label.slug }}/">{{ label.name }}</a>
+{%- endfor %}
+    </div>
+    <h1>{{ item.title }}</h1>
+{%- if item.summary %}
+    <p>{{ item.summary }}</p>
+{%- endif %}
+  </section>
+
+  <section class="osi-wrap osi-subsection osi-article">
+{%- if item.isEvent %}
+    <dl class="osi-article__facts">
+      <div><dt>{{ item.eventTypeName }}</dt><dd><time datetime="{{ item.eventStart }}">{{ item.eventDateText }}</time></dd></div>
+{%- if item.eventTime %}
+      <div><dt>Time</dt><dd>{{ item.eventTime }}</dd></div>
+{%- endif %}
+{%- if item.eventPlace %}
+      <div><dt>Place</dt><dd>{{ item.eventPlace }}</dd></div>
+{%- endif %}
+    </dl>
+{%- endif %}
+{%- if item.image %}
+    <img class="osi-article__image" src="{{ item.image.url }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}">
+{%- endif %}
+    <div class="osi-article__body osi-prose">
+{{ item.body | safe }}
+    </div>
+{%- if item.areas.length %}
+    <ul class="osi-chips">
+{%- for a in item.areas %}
+      <li><a href="/{{ a }}/">{{ site.sections[a] }}</a></li>
+{%- endfor %}
+    </ul>
+{%- endif %}
+    <p><a class="osi-link" href="/news/">All news</a></p>
+  </section>
+</article>
+{% endblock %}

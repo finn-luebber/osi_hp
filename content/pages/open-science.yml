@@ -1,0 +1,27 @@
+hero:
+  number: "01"
+  title: "The technical core of open research"
+  lead: "Open access, open data and research data management are the practical foundations of open science. We collect information and activities around them on campus, and run the Open Science Talks and the Open Science Award."
+aside:
+  title: "In this area"
+topics:
+  label: "Topics"
+  title: "What this area covers"
+activities:
+  title: "What we do in this area"
+  columns:
+    - title: "Teaching"
+      points:
+        - "Contributions to courses in Clinical Psychology and Psychotherapy (MSc), Nutritional Medicine (MSc) and ProWiSP"
+        - "Supervision of theses"
+    - title: "Advice"
+      points:
+        - "Open Science office hour every last Friday of the month. Email us to schedule a time."
+    - title: "Surveys"
+      points:
+        - "Open science surveys on campus, with a report to the university leadership"
+people:
+  title: "People in this area"
+join:
+  title: "Questions about open science? Just email us."
+  text: "We are open to interested people from all levels and all backgrounds at the University of Lübeck."

@@ -1,0 +1,58 @@
+{%- set nav = [['/', 'Home', 'home'], ['/open-science/', 'Open Science', 'open-science'], ['/citizen-science/', 'Citizen Science', 'citizen-science'], ['/metascience/', 'Metascience', 'metascience'], ['/#latest-news', 'News', 'news'], ['/team/', 'Team', 'team'], ['/#join', 'Contact', 'contact']] -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>{{ (pageTitle + ' – OSI Lübeck') if pageTitle else 'Open Science Initiative Lübeck' }}</title>
+<meta name="description" content="The Open Science Initiative Lübeck: making science open, transparent and reproducible at the University of Lübeck.">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body class="site{{ ' has-crumbs' if crumbs }}">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="site-header__in">
+    <button class="site-menu-btn" type="button" aria-expanded="false" aria-controls="site-menu"><span class="site-menu-btn__bars" aria-hidden="true"><span></span><span></span><span></span></span><span class="site-menu-btn__open">Menu</span><span class="site-menu-btn__close">Close</span></button>
+    <nav class="site-nav" id="site-menu" aria-label="Main">
+      <ul>
+{%- for item in nav %}
+        <li><a href="{{ item[0] }}"{{ ' aria-current="page"' | safe if current == item[2] }}>{{ item[1] }}</a></li>
+{%- endfor %}
+      </ul>
+    </nav>
+    <a class="site-logo" href="/"><img src="/assets/img/logo.png" alt="Universität zu Lübeck, Open Science Initiative" width="190" height="60"></a>
+  </div>
+{%- if crumbs %}
+  <nav class="site-crumbs" aria-label="You are here">
+    <ol>
+{%- for c in crumbs %}
+{%- if c[0] %}
+    <li><a href="{{ c[0] }}">{{ c[1] }}</a></li>
+{%- else %}
+    <li aria-current="page">{{ c[1] }}</li>
+{%- endif %}
+{%- endfor %}
+    </ol>
+  </nav>
+{%- endif %}
+</header>
+<main id="main">
+{% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+  <div class="site-footer__in">
+    <div>© {{ site.year }} OSI Lübeck</div>
+    <nav aria-label="Legal">
+      <ul>
+        <li><a href="/imprint/">Imprint</a></li>
+        <li><a href="/privacy/">Privacy policy</a></li>
+        <li><a href="/accessibility/">Accessibility</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

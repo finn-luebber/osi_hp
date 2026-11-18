@@ -1,0 +1,45 @@
+# Version (b): repository on GitLab.
+# Builds on every change and through a nightly pipeline schedule (Build › Pipeline schedules),
+# so that passed dates move on. Settings › CI/CD › Variables:
+#   DECAP_GITLAB_APP_ID  application ID for the editor at /admin/ (docs/HOSTING.md)
+#   DEPLOY_TARGET        "pages" (default, GitLab Pages) or "server" (your own web server)
+#   for "server" also: DEPLOY_HOST, DEPLOY_USER, DEPLOY_PATH, SSH_PRIVATE_KEY, SSH_KNOWN_HOSTS
+image: node:22
+
+stages: [build, deploy]
+
+variables:
+  DEPLOY_TARGET: pages
+
+build:
+  stage: build
+  cache: { key: npm, paths: [.npm/] }
+  script:
+    - npm ci --cache .npm --prefer-offline
+    # GitLab Pages may serve the site from a sub-folder such as /website/; links follow it.
+    - if [ "$DEPLOY_TARGET" = "pages" ] && [ -n "$CI_PAGES_URL" ]; then export PATH_PREFIX="$(node -e 'const p=new URL(process.env.CI_PAGES_URL).pathname; console.log(p.endsWith("/")?p:p+"/")')"; fi
+    - export SITE_URL="${SITE_URL:-$CI_PAGES_URL}"
+    - npx @11ty/eleventy
+  artifacts:
+    paths: [_site]
+    expire_in: 1 week
+
+pages:
+  stage: deploy
+  script:
+    - rm -rf public && mv _site public
+  artifacts:
+    paths: [public]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DEPLOY_TARGET == "pages"
+
+server:
+  stage: deploy
+  image: alpine:3.20
+  script:
+    - apk add --no-cache openssh-client rsync
+    - mkdir -p ~/.ssh && echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - rsync -az --delete _site/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DEPLOY_TARGET == "server"

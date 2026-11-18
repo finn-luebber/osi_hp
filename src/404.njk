@@ -1,0 +1,13 @@
+---
+permalink: /404.html
+---
+{% extends "base.njk" %}
+{% set pageTitle = 'Page not found' %}
+{% set crumbs = [['/', 'Home'], [false, 'Page not found']] %}
+{% block content %}
+<section class="osi-wrap osi-pagehead">
+  <h1>Page not found</h1>
+  <p>The page you are looking for does not exist or has moved.</p>
+  <p><a class="osi-btn" href="/">To the homepage</a></p>
+</section>
+{% endblock %}

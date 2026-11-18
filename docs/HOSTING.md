@@ -1,0 +1,159 @@
+# Hosting the OSI Lübeck website
+
+The repository runs in two versions: **(a) on GitHub** or **(b) on GitLab**. Both build the same site from the same files. Choose one; the other version's settings file is simply ignored.
+
+|  | (a) GitHub | (b) GitLab |
+|---|---|---|
+| Build file | `.github/workflows/build.yml` | `.gitlab-ci.yml` |
+| Publishing | GitHub Pages | GitLab Pages, or your own web server |
+| Daily rebuild | built in (02:15 UTC) | one pipeline schedule to add |
+| Editor login | needs a small login service (included, runs on Cloudflare) | works directly (GitLab application) |
+| Extra security headers | not possible on GitHub Pages | possible on your own server |
+
+Both versions set the editor up by themselves from where the build runs: repository name, branch and login. You only enter the one login value named below.
+
+**Recommendation:** GitLab, if the university runs one or you can use gitlab.com, because editors can log in without the extra login service.
+
+---
+
+## Before you start
+
+- A Git account for every editor (GitHub or GitLab).
+- For trying things on your own computer: [Node.js](https://nodejs.org) 20 or newer and Git.
+- The folder from the ZIP file, uploaded as a new repository with the branch `main`.
+
+```
+cd osi-website-static
+git init -b main
+git add -A
+git commit -m "First version"
+git remote add origin <address of the new repository>
+git push -u origin main
+```
+
+---
+
+## (a) GitHub
+
+### 1. Publish with GitHub Pages
+
+1. Repository › **Settings › Pages** › Build and deployment › Source: **GitHub Actions**.
+2. Repository › **Actions**: the workflow "Build and publish" runs after every push, every night, and when started by hand ("Run workflow").
+3. The site appears at `https://<owner>.github.io/<repository>/`. All links follow that sub-folder automatically.
+
+**Own domain** (for example `osi-luebeck.de`): Settings › Pages › Custom domain, and set the DNS record as GitHub explains there. Then add the variable `SITE_URL` = `https://osi-luebeck.de` (Settings › Secrets and variables › Actions › **Variables**).
+
+### 2. Editor login (login service)
+
+GitHub only hands out logins to a server that keeps a secret. `deploy/github-login/worker.js` is that server, about 80 lines, to run on Cloudflare Workers (free plan).
+
+1. **GitHub OAuth app:** your account or organisation › Settings › Developer settings › **OAuth Apps › New OAuth App**.
+   - Homepage URL: the website address.
+   - Authorization callback URL: `https://<worker-name>.<your-subdomain>.workers.dev/callback` (from step 2; you can fill it in afterwards).
+   - Note the **Client ID** and create a **Client secret**.
+2. **Cloudflare Worker:** dash.cloudflare.com › Workers & Pages › Create › Worker › paste the content of `deploy/github-login/worker.js` › Deploy.
+   - Settings › Variables: `GITHUB_CLIENT_ID` (text), `GITHUB_CLIENT_SECRET` (**secret**), `ALLOWED_ORIGIN` = the website's origin, e.g. `https://osi-luebeck.github.io` or `https://osi-luebeck.de` (no path, no slash at the end).
+3. In the GitHub repository, add the variable **`DECAP_OAUTH_URL`** = the worker's address, e.g. `https://osi-login.example.workers.dev`.
+4. Run the workflow again. The build log shows `[osi] editing interface: github, <owner>/<repository>, branch main`.
+5. Give editors **Write** access to the repository (Settings › Collaborators and teams).
+
+Editors then open `/admin/` (there is no link to it on the site; bookmark it) and click **Login with GitHub**.
+
+> The login service has not been tested against GitHub on our side. If you prefer not to run it, editors can still edit through GitHub's own web editor (press `.` in the repository) or on their own computer (see "On your own computer").
+
+---
+
+## (b) GitLab
+
+### 1. Publish
+
+**GitLab Pages** (default): nothing to set. After the first pipeline, the address is shown under **Deploy › Pages**. If GitLab serves the site from a sub-folder, all links follow it automatically.
+
+**Your own web server** instead: Settings › CI/CD › **Variables**:
+
+| Variable | Value |
+|---|---|
+| `DEPLOY_TARGET` | `server` |
+| `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH` | server, account, folder of the website |
+| `SSH_PRIVATE_KEY` | a key that may copy to that folder (protected, masked) |
+| `SSH_KNOWN_HOSTS` | output of `ssh-keyscan <server>` |
+
+The server serves the folder as plain files. Apache uses the included `.htaccess` files (security headers, HTTPS, error page) by itself; for nginx see `deploy/nginx/osi-site.conf`.
+
+**Own domain** on GitLab Pages: Deploy › Pages › New domain; then add the variable `SITE_URL`.
+
+### 2. Daily rebuild
+
+**Build › Pipeline schedules › New schedule**: every day, for example at 03:00, branch `main`. This moves dates that have passed out of "Upcoming".
+
+### 3. Editor login (GitLab application)
+
+1. Group or user **Settings › Applications › Add new application**:
+   - Name: `OSI website editor`
+   - Redirect URI: `<website address>/admin/` (for example `https://osi.pages.uni-luebeck.de/website/admin/`)
+   - **Confidential: off.** Scopes: **api**.
+2. Copy the **Application ID** into the CI/CD variable **`DECAP_GITLAB_APP_ID`**.
+3. Run the pipeline again. The build log shows `[osi] editing interface: gitlab, <group>/<project>, branch main` and no "still missing".
+4. Give editors at least the **Developer** role in the project, and allow Developers to push to `main` (Settings › Repository › Protected branches), or use the **Maintainer** role.
+
+Editors then open `/admin/` (there is no link to it on the site; bookmark it) and click **Login with GitLab**.
+
+---
+
+## Legal pages
+
+- **Privacy policy:** the paragraph about visiting the website depends on the hosting. The build picks it by itself: GitHub Pages, GitLab Pages on gitlab.com, or a web server (your own server, or GitLab Pages on a university GitLab). For a web server, fill in its operator and how long its log files are kept in `content/pages/privacy-hosting.yml` (or in the editor under Page texts); until then the build log reminds you. To choose by hand, set the variable `OSI_HOSTING` to `github`, `gitlab_com` or `server`.
+- **Accessibility statement:** a self-assessment from November 2026, to be reviewed once a year.
+- **Imprint:** names Frieder M Paulus as the person representing the initiative and responsible for the content. Update it if that changes.
+- Have the privacy policy and the accessibility statement checked by the university's data protection officer and its accessibility contact before going live. A German version may be expected.
+
+## On your own computer
+
+```
+npm ci
+npm start            # website at http://localhost:8080, rebuilt on every change
+npm run cms          # second window: editor at http://localhost:8080/admin/, works on the files here
+```
+
+`npm run cms` needs no login. Save in the editor, check the result at http://localhost:8080, then commit and push with Git.
+
+---
+
+## Settings you can set by hand
+
+Normally not needed; for special cases (another branch, a mirror, testing):
+
+| Variable | Meaning |
+|---|---|
+| `PATH_PREFIX` | sub-folder of the site, e.g. `/website/` |
+| `SITE_URL` | full address of the site, shown in the editor |
+| `CMS_BACKEND` | `github` or `gitlab` |
+| `CMS_REPO`, `CMS_BRANCH` | repository and branch the editor writes to |
+| `CMS_BASE_URL`, `CMS_API_ROOT` | address of the Git host and its API |
+| `CMS_APP_ID` | GitLab application ID (same as `DECAP_GITLAB_APP_ID`) |
+| `OSI_HOSTING` | which hosting paragraph the privacy policy shows: `github`, `gitlab_com` or `server` |
+
+---
+
+## Security
+
+- The public site is plain files: no program, database or login runs on the web server.
+- Every page carries a strict content security policy: only scripts, styles, fonts and pictures from the site itself. On your own server, the `.htaccess` (Apache) or nginx rules add it as a header too, with HTTPS enforcement and further protective headers.
+- Pictures are decoded and saved again during the build, so camera and location data never reach the site.
+- The editor at `/admin/` is served from the site itself (Decap CMS 3.17.3, no outside scripts). It needs a looser rule (it evaluates generated code) and may contact only the Git host. Logins and permissions are those of GitHub or GitLab, including two-factor login.
+- Who may change the site is decided in the repository's members list. Remove people who leave.
+
+## Updating the tools
+
+Versions are fixed in `package.json` and `package-lock.json`, so builds stay identical. To update, change the version, run `npm install`, check locally, commit. The editor is the folder `admin/decap/`; replace it with the `dist` files of a newer `decap-cms` package.
+
+## When something goes wrong
+
+| What you see | Cause and fix |
+|---|---|
+| The pipeline/workflow fails | Open its log. Content problems are listed after `[osi] … problem(s) in content/`. |
+| "Problem(s) in content" in the log, site still built | The named file has a mistake (missing date, picture not found …); the site was built without that part. |
+| Editor shows "Error loading the CMS configuration" | A mistake in `admin/cms.yml`; the message names the line. |
+| Editor login fails (GitLab) | Redirect URI must match the address of `/admin/` exactly, including the trailing `/`. |
+| Editor login fails (GitHub) | Check the three worker variables and `DECAP_OAUTH_URL`; `ALLOWED_ORIGIN` without trailing slash. |
+| Links broken on GitHub/GitLab Pages | The build sets `PATH_PREFIX` itself; if you changed the build file, make sure it still does. |

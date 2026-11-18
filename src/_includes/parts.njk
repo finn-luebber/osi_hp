@@ -1,0 +1,74 @@
+{# Building blocks shared by several pages #}
+
+{% macro avatar(member, large=false) -%}
+{%- if member.photo -%}
+<img class="osi-avatar{{ ' osi-avatar--large' if large }}" src="{{ member.photo.thumb }}" alt="" width="{{ 96 if large else 48 }}" height="{{ 96 if large else 48 }}" loading="lazy">
+{%- else -%}
+<span class="osi-avatar{{ ' osi-avatar--large' if large }} osi-avatar--empty" aria-hidden="true"></span>
+{%- endif -%}
+{%- endmacro %}
+
+{% macro newsCard(item, media) -%}
+<article class="osi-card{{ ' osi-card--media' if media }}">
+{%- if media -%}
+{%- if item.image -%}<a class="osi-card__image" href="{{ item.url }}" tabindex="-1" aria-hidden="true"><img src="{{ item.image.thumb }}" alt="" loading="lazy"></a>
+{%- else -%}<span class="osi-card__image osi-card__image--empty" aria-hidden="true"></span>{%- endif -%}
+{%- endif -%}
+<div class="osi-card__body"><div class="osi-card__meta"><time datetime="{{ item.date }}">{{ item.dateText }}</time>
+{%- if item.labels.length %}<span class="osi-card__cat">{{ item.labels[0].name }}</span>{% endif -%}
+</div><h3><a href="{{ item.url }}">{{ item.title }}</a></h3></div></article>
+{%- endmacro %}
+
+{% macro band(featured) %}
+{%- if featured %}
+<div class="osi-band">
+  <section class="osi-wrap osi-band__inner">
+    <div class="osi-band__main">
+      <div class="osi-label">Featured</div>
+      <h2>{{ featured.title }}</h2>
+{%- if featured.summary %}
+      <p>{{ featured.summary }}</p>
+{%- endif %}
+      <div class="osi-band__cta"><a class="osi-btn osi-btn--light" href="{{ featured.url }}">Read more</a></div>
+    </div>
+{%- if featured.isEvent %}
+    <dl class="osi-facts">
+      <div><dt>{{ featured.eventTypeName }}</dt><dd>{{ featured.eventDateText }}{{ (', ' + featured.eventTime) if featured.eventTime }}</dd></div>
+{%- if featured.eventPlace %}
+      <div><dt>Place</dt><dd>{{ featured.eventPlace }}</dd></div>
+{%- endif %}
+    </dl>
+{%- endif %}
+  </section>
+</div>
+{%- endif %}
+{% endmacro %}
+
+{% macro latest(items, heading) %}
+{%- set withImages = items | anyImage -%}
+<div class="osi-white">
+  <section id="latest-news" class="osi-wrap osi-news">
+    <div class="osi-news__head">
+      <h2 class="osi-h2">{{ heading }}</h2>
+      <a class="osi-link" href="/news/">All news</a>
+    </div>
+{%- if items.length %}
+    <div class="osi-grid">
+{%- for item in items %}
+      {{ newsCard(item, withImages) }}
+{%- endfor %}
+    </div>
+{%- else %}
+    <p class="osi-news__empty">No news in this area yet.</p>
+{%- endif %}
+  </section>
+</div>
+{% endmacro %}
+
+{% macro join(j, email, id=true) %}
+<section{{ ' id="join"' | safe if id }} class="osi-wrap osi-join">
+  <h2>{{ j.title }}</h2>
+  <p>{{ j.text | safe }}</p>
+  <a class="osi-btn osi-btn--large" href="mailto:{{ email }}">{{ email }}</a>
+</section>
+{% endmacro %}

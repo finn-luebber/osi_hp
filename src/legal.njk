@@ -1,0 +1,20 @@
+---
+pagination:
+  data: site.legal
+  size: 1
+  alias: legal
+permalink: "{{ legal.url }}"
+---
+{% extends "base.njk" %}
+{% set pageTitle = legal.title %}
+{% set crumbs = [['/', 'Home'], [false, legal.title]] %}
+{% block content %}
+<section class="osi-wrap osi-pagehead osi-pagehead--tight">
+  <h1>{{ legal.title }}</h1>
+</section>
+<section class="osi-wrap osi-subsection osi-article">
+  <div class="osi-article__body osi-prose">
+{{ legal.body | safe }}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,206 @@
+# Content settings of the editing interface (Decap CMS) at /admin/.
+# The build turns this file into /admin/config.yml and adds the part that depends on where
+# the repository lives (GitHub or GitLab, repository name, login). See docs/HOSTING.md.
+
+locale: en
+logo_url: ../assets/img/logo.png
+media_folder: content/uploads
+public_folder: /uploads
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+# Reused field definitions
+_shared:
+  areas: &areas
+    - { label: "Open Science", value: open-science }
+    - { label: "Citizen Science", value: citizen-science }
+    - { label: "Metascience", value: metascience }
+  inline_hint: &inline "Links: `[link text](https://address)` · bold: `**text**` · italics: `*text*`"
+  join: &join
+    label: "Contact section at the bottom"
+    name: join
+    widget: object
+    collapsed: true
+    fields:
+      - { label: "Headline", name: title, widget: string }
+      - { label: "Text", name: text, widget: text, hint: *inline }
+  columns: &columns
+    label: "Columns"
+    name: columns
+    widget: list
+    summary: "{{fields.title}}"
+    collapsed: false
+    fields:
+      - { label: "Column heading", name: title, widget: string }
+      - { label: "Points", name: points, widget: list, collapsed: false, field: { label: "Point", name: point, widget: text, hint: *inline } }
+  topic_fields: &topic_fields
+    - { label: "Title", name: title, widget: string }
+    - { label: "Summary", name: summary, widget: text, hint: "Shown in the box and as the introduction of the box’s page. Links: `[link text](https://address)`" }
+    - { label: "Order", name: order, widget: number, value_type: int, default: 100, hint: "Lower numbers come first" }
+    - { label: "Text of the box’s page", name: body, widget: markdown, required: false, buttons: [bold, italic, link, heading-two, bulleted-list], editor_components: [image] }
+    - { label: "Picture (optional)", name: picture, widget: image, required: false, choose_url: false, hint: "Shown above the text. Best size 1600 × 900 pixels." }
+    - { label: "Description of the picture", name: picture_alt, widget: string, required: false }
+    - { label: "Link button: text (optional)", name: link_text, widget: string, required: false }
+    - { label: "Link button: address", name: link_url, widget: string, required: false, hint: "https://…, mailto:… or a page of this site such as /team/" }
+    - { label: "Hide from the site", name: hidden, widget: boolean, default: false, required: false }
+
+collections:
+  - name: news
+    label: "News"
+    label_singular: "News item"
+    folder: content/news
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date}} · {{title}}"
+    sortable_fields: [date, title]
+    editor: { preview: false }
+    fields:
+      - { label: "Title", name: title, widget: string }
+      - { label: "Publication date", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { label: "Short summary", name: summary, widget: text, required: false, hint: "One or two sentences, shown in lists and in the Featured band" }
+      - { label: "Text", name: body, widget: markdown, required: false, buttons: [bold, italic, link, heading-two, bulleted-list], editor_components: [image] }
+      - { label: "Featured image", name: image, widget: image, required: false, choose_url: false, hint: "Best size 1600 × 900 pixels (16:9), main subject in the middle" }
+      - { label: "Description of the featured image", name: image_alt, widget: string, required: false }
+      - { label: "Areas", name: areas, widget: select, multiple: true, required: false, options: *areas, hint: "The news also appears on the pages of these areas" }
+      - { label: "Labels", name: labels, widget: string, required: false, hint: "Separate with commas, for example: Events, Publications" }
+      - { label: "Show in the Featured band", name: featured, widget: boolean, default: false, required: false }
+      - { label: "Draft (not shown on the site)", name: draft, widget: boolean, default: false, required: false }
+      - { label: "Date to remember: this news is about a talk, conference, workshop, deadline …", name: date_to_remember, widget: boolean, default: false, required: false, hint: "Then also fill in the date below. The news then shows its date on the News page and, until the date has passed, can appear in the Upcoming box on the homepage." }
+      - { label: "Kind of date", name: event_type, widget: select, required: false, default: talk, options: [{ label: Talk, value: talk }, { label: Workshop, value: workshop }, { label: Conference, value: conference }, { label: Deadline, value: deadline }, { label: "Award ceremony", value: award }, { label: Event, value: other }] }
+      - { label: "Date (for a deadline: the last day)", name: event_start, widget: datetime, required: false, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { label: "Last day (only if it runs over several days)", name: event_end, widget: datetime, required: false, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: true }
+      - { label: "Time", name: event_time, widget: string, required: false, hint: "free text, e.g. 6 pm to 8 pm" }
+      - { label: "Place", name: event_place, widget: string, required: false }
+
+  - name: team
+    label: "Team"
+    label_singular: "Team member"
+    folder: content/team
+    create: true
+    identifier_field: name
+    slug: "{{slug}}"
+    summary: "{{name}}"
+    sortable_fields: [order, name]
+    editor: { preview: false }
+    fields:
+      - { label: "Name", name: name, widget: string }
+      - { label: "Field of expertise", name: expertise, widget: text, required: false }
+      - { label: "Institute", name: institute, widget: string, required: false }
+      - { label: "Portrait", name: photo, widget: image, required: false, choose_url: false, hint: "Square, 800 × 800 pixels, face in the middle" }
+      - { label: "Order", name: order, widget: number, value_type: int, default: 100, hint: "Lower numbers come first" }
+      - { label: "Open Science", name: area_open_science, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }], hint: "A member can belong to several areas and head more than one" }
+      - { label: "Citizen Science", name: area_citizen_science, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }] }
+      - { label: "Metascience", name: area_metascience, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }] }
+      - { label: "Hide from the site", name: hidden, widget: boolean, default: false, required: false }
+
+  - { name: topics-open-science, label: "Open Science: boxes", label_singular: "box", folder: content/topics/open-science, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }
+  - { name: topics-citizen-science, label: "Citizen Science: boxes", label_singular: "box", folder: content/topics/citizen-science, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }
+  - { name: topics-metascience, label: "Metascience: boxes", label_singular: "box", folder: content/topics/metascience, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }
+
+  - name: pages
+    label: "Page texts"
+    editor: { preview: false }
+    files:
+      - label: "Homepage"
+        name: home
+        file: content/pages/home.yml
+        fields:
+          - label: "Opening"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Small label above the headline", name: label, widget: string }
+              - { label: "Headline", name: title, widget: string }
+              - { label: "Introduction", name: lead, widget: text, hint: *inline }
+              - { label: "Button text", name: button, widget: string, required: false, hint: "opens an e-mail to the contact address" }
+              - { label: "Text of the link next to the button", name: more, widget: string, required: false }
+          - label: "Upcoming box next to the opening"
+            name: events_box
+            widget: object
+            hint: "Lists the next three dates by itself, from news marked as a date to remember"
+            fields:
+              - { label: "Headline", name: title, widget: string }
+              - { label: "Text when nothing is coming up", name: empty, widget: string }
+              - { label: "Text of the link below the list", name: all, widget: string }
+          - label: "The three areas"
+            name: pillars
+            widget: object
+            fields:
+              - { label: "Small label above the headline", name: label, widget: string }
+              - { label: "Headline", name: title, widget: string }
+              - { label: "Open Science column", name: open-science, widget: object, fields: [{ label: "Text", name: text, widget: text, hint: *inline }] }
+              - { label: "Citizen Science column", name: citizen-science, widget: object, fields: [{ label: "Text", name: text, widget: text, hint: *inline }] }
+              - { label: "Metascience column", name: metascience, widget: object, fields: [{ label: "Text", name: text, widget: text, hint: *inline }] }
+          - { label: "News section", name: news, widget: object, fields: [{ label: "Headline", name: title, widget: string }] }
+          - label: "Activities"
+            name: activities
+            widget: object
+            fields:
+              - { label: "Small label above the headline", name: label, widget: string }
+              - { label: "Headline", name: title, widget: string }
+              - *columns
+          - label: "Information boxes (office hour, survey, networks)"
+            name: boxes
+            widget: list
+            summary: "{{fields.label}}"
+            fields:
+              - { label: "Small label", name: label, widget: string }
+              - { label: "Headline", name: title, widget: string }
+              - { label: "Text", name: text, widget: text, hint: *inline }
+              - { label: "Link at the bottom (optional)", name: link, widget: object, required: false, fields: [{ label: "Link text", name: text, widget: string, required: false }, { label: "Address", name: url, widget: string, required: false }] }
+          - *join
+      - &area_page
+        label: "Open Science page"
+        name: open-science
+        file: content/pages/open-science.yml
+        fields:
+          - label: "Opening"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Number before the area name", name: number, widget: string, required: false }
+              - { label: "Headline", name: title, widget: string }
+              - { label: "Introduction", name: lead, widget: text, hint: *inline }
+          - { label: "Box next to the opening", name: aside, widget: object, hint: "It lists the boxes of this area and the people section by itself", fields: [{ label: "Headline", name: title, widget: string }] }
+          - { label: "Section with the boxes", name: topics, widget: object, hint: "The boxes themselves are edited under “Open Science: boxes” and so on", fields: [{ label: "Small label above the headline", name: label, widget: string }, { label: "Headline", name: title, widget: string }] }
+          - { label: "Activities", name: activities, widget: object, fields: [{ label: "Headline", name: title, widget: string }, *columns] }
+          - { label: "People section", name: people, widget: object, hint: "The people come from Team", fields: [{ label: "Headline", name: title, widget: string }] }
+          - *join
+      - { <<: *area_page, label: "Citizen Science page", name: citizen-science, file: content/pages/citizen-science.yml }
+      - { <<: *area_page, label: "Metascience page", name: metascience, file: content/pages/metascience.yml }
+      - label: "Team page"
+        name: team
+        file: content/pages/team.yml
+        fields:
+          - { label: "Opening", name: hero, widget: object, fields: [{ label: "Headline", name: title, widget: string }, { label: "Introduction", name: lead, widget: text, hint: *inline }] }
+          - *join
+      - label: "News page"
+        name: news
+        file: content/pages/news.yml
+        fields:
+          - { label: "Opening", name: hero, widget: object, fields: [{ label: "Headline", name: title, widget: string }, { label: "Introduction", name: lead, widget: text, hint: *inline }] }
+      - &legal { label: "Imprint", name: imprint, file: content/pages/imprint.md, fields: [{ label: "Headline", name: title, widget: string }, { label: "Text", name: body, widget: markdown }] }
+      - { <<: *legal, label: "Privacy policy", name: privacy, file: content/pages/privacy.md }
+      - { <<: *legal, label: "Accessibility", name: accessibility, file: content/pages/accessibility.md }
+      - label: "Privacy policy: hosting paragraph"
+        name: privacy-hosting
+        file: content/pages/privacy-hosting.yml
+        fields:
+          - { label: "If hosted on GitHub Pages", name: github, widget: markdown, buttons: [bold, italic, link] }
+          - { label: "If hosted on GitLab Pages (gitlab.com)", name: gitlab_com, widget: markdown, buttons: [bold, italic, link] }
+          - { label: "If hosted on your own web server", name: server, widget: markdown, buttons: [bold, italic, link], hint: "{operator} and {log_retention} are replaced by the two fields below" }
+          - { label: "Operator of the web server", name: operator, widget: string }
+          - { label: "How long server log files are kept", name: log_retention, widget: string, hint: "Ask the people who run the server, e.g. 7 days" }
+
+  - name: settings
+    label: "Settings"
+    editor: { preview: false }
+    files:
+      - label: "Contact"
+        name: settings
+        file: content/settings.yml
+        fields:
+          - { label: "Contact e-mail address", name: contact_email, widget: string }
+          - { label: "Name of the site", name: site_name, widget: string }

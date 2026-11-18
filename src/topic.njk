@@ -1,0 +1,47 @@
+---
+pagination:
+  data: site.topics
+  size: 1
+  alias: card
+permalink: "{{ card.url }}"
+---
+{% extends "base.njk" %}
+{% set current = card.area %}
+{% set pageTitle = card.title + ' – ' + card.areaName %}
+{% set crumbs = [['/', 'Home'], ['/' + card.area + '/', card.areaName], [false, card.title]] %}
+{% block content %}
+<article>
+  <section class="osi-wrap osi-pagehead osi-pagehead--tight">
+    <div class="osi-label osi-label--accent"><a href="/{{ card.area }}/">{{ card.areaName }}</a></div>
+    <h1>{{ card.title }}</h1>
+{%- if card.summary %}
+    <p>{{ card.summary | safe }}</p>
+{%- endif %}
+  </section>
+
+  <section class="osi-wrap osi-subsection osi-article">
+{%- if card.picture %}
+    <img class="osi-article__image" src="{{ card.picture.url }}" alt="{{ card.picture.alt }}" width="{{ card.picture.width }}" height="{{ card.picture.height }}">
+{%- endif %}
+{%- if card.body %}
+    <div class="osi-article__body osi-prose">
+{{ card.body | safe }}
+    </div>
+{%- endif %}
+{%- if card.link.url %}
+    <p><a class="osi-btn" href="{{ card.link.url }}">{{ card.link.text }}</a></p>
+{%- endif %}
+{%- if card.siblings.length %}
+    <nav class="osi-more" aria-label="More in {{ card.areaName }}">
+      <div class="osi-label">More in {{ card.areaName }}</div>
+      <ul class="osi-chips">
+{%- for other in card.siblings %}
+        <li><a href="{{ other.url }}">{{ other.title }}</a></li>
+{%- endfor %}
+      </ul>
+    </nav>
+{%- endif %}
+    <p><a class="osi-link" href="/{{ card.area }}/">Back to {{ card.areaName }}</a></p>
+  </section>
+</article>
+{% endblock %}

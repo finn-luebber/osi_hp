@@ -1,0 +1,17 @@
+# The paragraph "Visiting the website" of the privacy policy depends on where the site is hosted.
+# The build picks the right one by itself (see docs/HOSTING.md); edit the texts here if needed.
+github: |-
+  This website is hosted on GitHub Pages, a service of GitHub, Inc., USA. When you open a page, your browser sends technical data to GitHub's servers, as with any website: your IP address, the date and time, the page requested and details of your browser. GitHub logs visitors' IP addresses for security purposes. We have no access to these logs and do not use them.
+
+  Data may be processed in the USA. How GitHub handles and safeguards this data is described in the [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement). The legal basis is Art. 6(1)(e) GDPR: providing public information is part of the university's tasks.
+gitlab_com: |-
+  This website is hosted on GitLab Pages, a service of GitLab Inc., USA. When you open a page, your browser sends technical data to GitLab's servers, as with any website: your IP address, the date and time, the page requested and details of your browser. GitLab may log this data to run the service and keep it secure. We have no access to these logs and do not use them.
+
+  Data may be processed in the USA. How GitLab handles and safeguards this data is described in the [GitLab Privacy Statement](https://about.gitlab.com/privacy/). The legal basis is Art. 6(1)(e) GDPR: providing public information is part of the university's tasks.
+server: |-
+  This website is hosted on a web server of {operator}. When you open a page, the server automatically records technical data in log files: your IP address, the date and time, the page requested, the amount of data sent, the page you came from, and details of your browser and operating system. This is needed to deliver the pages and to keep the server secure. The data is not combined with other data and not used to identify you.
+
+  The log files are deleted after {log_retention}. The legal basis is Art. 6(1)(e) GDPR: providing public information is part of the university's tasks.
+# Used in the "server" text above. Ask the people who run the server.
+operator: "the University of Lübeck"
+log_retention: "[NUMBER] days"

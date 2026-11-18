@@ -1,0 +1,105 @@
+---
+permalink: /
+---
+{% extends "base.njk" %}
+{% import "parts.njk" as parts %}
+{% set current = 'home' %}
+{% set h = site.home %}
+{% block content %}
+<section class="osi-wrap osi-hero">
+  <div class="osi-hero__main">
+    <div class="osi-label osi-label--accent">{{ h.hero.label }}</div>
+    <h1 class="osi-hero__title">{{ h.hero.title }}</h1>
+    <p class="osi-hero__lead">{{ h.hero.lead | safe }}</p>
+    <div class="osi-actions">
+{%- if h.hero.button %}
+      <a class="osi-btn" href="mailto:{{ site.contactEmail }}">{{ h.hero.button }}</a>
+{%- endif %}
+{%- if h.hero.more %}
+      <a class="osi-link" href="#pillars">{{ h.hero.more }}</a>
+{%- endif %}
+    </div>
+  </div>
+  <aside class="osi-why osi-eventsbox">
+    <h2 class="osi-why__title"><a href="/news/dates/">{{ h.eventsBox.title }}</a></h2>
+    <ul{{ ' hidden' if not h.upcoming.length }}>
+{%- for item in h.upcoming %}
+      <li data-last="{{ item.eventLast }}"{{ ' hidden' if loop.index > 3 }}><time datetime="{{ item.eventStart }}">{{ item.eventShort }} · {{ item.eventTypeName }}</time><a href="{{ item.url }}">{{ item.title }}</a></li>
+{%- endfor %}
+    </ul>
+    <p class="osi-eventsbox__empty"{{ ' hidden' if h.upcoming.length }}>{{ h.eventsBox.empty }}</p>
+    <a class="osi-link" href="/news/dates/">{{ h.eventsBox.all }}</a>
+  </aside>
+</section>
+
+<div id="pillars" class="osi-white">
+  <section class="osi-wrap osi-section">
+    <div class="osi-head">
+      <div class="osi-label">{{ h.pillarsLabel }}</div>
+      <h2 class="osi-h2">{{ h.pillarsTitle }}</h2>
+    </div>
+    <div class="osi-grid">
+{%- for pillar in h.pillars %}
+      <article class="osi-pillar">
+        <h3><a href="/{{ pillar.slug }}/">{{ pillar.name }}</a></h3>
+        <p>{{ pillar.text | safe }}</p>
+{%- if pillar.heads.length %}
+        <div class="osi-heads">
+          <div class="osi-label">Heads of this area</div>
+          <ul>
+{%- for member in pillar.heads %}
+            <li>{{ parts.avatar(member) }}<span>{{ member.name }}</span></li>
+{%- endfor %}
+          </ul>
+        </div>
+{%- endif %}
+      </article>
+{%- endfor %}
+    </div>
+  </section>
+</div>
+
+{{ parts.band(h.featured) }}
+
+{{ parts.latest(h.latest, h.newsTitle) }}
+
+{%- if h.columns.length %}
+<section id="activities" class="osi-wrap osi-section">
+  <div class="osi-head">
+    <div class="osi-label">{{ h.activitiesLabel }}</div>
+    <h2 class="osi-h2">{{ h.activitiesTitle }}</h2>
+  </div>
+  <div class="osi-grid osi-grid--4">
+{%- for column in h.columns %}
+    <div class="osi-activity">
+      <h3>{{ column.title }}</h3>
+      <ul>
+{%- for point in column.points %}
+        <li>{{ point | safe }}</li>
+{%- endfor %}
+      </ul>
+    </div>
+{%- endfor %}
+  </div>
+</section>
+{%- endif %}
+
+{%- if h.boxes.length %}
+<div class="osi-white">
+  <section class="osi-wrap osi-trio">
+{%- for box in h.boxes %}
+    <div class="osi-info">
+      <div class="osi-label">{{ box.label }}</div>
+      <h2>{{ box.title }}</h2>
+      <p>{{ box.text | safe }}</p>
+{%- if box.link.url %}
+      <a class="osi-link" href="{{ box.link.url }}">{{ box.link.text }}</a>
+{%- endif %}
+    </div>
+{%- endfor %}
+  </section>
+</div>
+{%- endif %}
+
+{{ parts.join(h.join, site.contactEmail) }}
+{% endblock %}

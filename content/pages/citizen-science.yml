@@ -1,0 +1,27 @@
+hero:
+  number: "02"
+  title: "Research with and for society"
+  lead: "Science communication and participation bring research and the public together. We collect the offers that already exist in Lübeck, link to them, and point to events and studies run by our members."
+aside:
+  title: "In this area"
+topics:
+  label: "Offers and projects"
+  title: "Taking part in science in Lübeck"
+activities:
+  title: "What we do in this area"
+  columns:
+    - title: "Offers"
+      points:
+        - "We collect and link citizen science and participation offers in Lübeck"
+    - title: "Events"
+      points:
+        - "Co-organisation of the Studium Generale 2024/25, “UnWissenSchafft Rassismus”"
+        - "[UPCOMING EVENTS]"
+    - title: "Member activities"
+      points:
+        - "Conferences and studies run by OSI members: [CURRENT ACTIVITIES]"
+people:
+  title: "People in this area"
+join:
+  title: "Want to take part, or list an offer? Just email us."
+  text: "We are happy to add citizen science and participation offers from Lübeck to this page."

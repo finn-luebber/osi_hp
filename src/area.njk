@@ -1,0 +1,110 @@
+---
+pagination:
+  data: site.areas
+  size: 1
+  alias: area
+permalink: "{{ area.url }}"
+---
+{% extends "base.njk" %}
+{% import "parts.njk" as parts %}
+{% set current = area.slug %}
+{% set pageTitle = area.name %}
+{% set crumbs = [['/', 'Home'], [false, area.name]] %}
+{% block content %}
+<section class="osi-wrap osi-hero">
+  <div class="osi-hero__main">
+    <div class="osi-label osi-label--accent">{{ (area.hero.number + ' · ' + area.name) if area.hero.number else area.name }}</div>
+    <h1 class="osi-hero__title">{{ area.hero.title }}</h1>
+    <p class="osi-hero__lead">{{ area.hero.lead | safe }}</p>
+  </div>
+  <aside class="osi-why">
+    <h2 class="osi-why__title"><strong>{{ area.asideTitle }}</strong></h2>
+    <ul>
+{%- for card in area.cards %}
+      <li><a href="#{{ card.id }}">{{ card.title }}</a></li>
+{%- endfor %}
+      <li><a href="#people">{{ area.peopleTitle }}</a></li>
+    </ul>
+  </aside>
+</section>
+
+{%- if area.cards.length %}
+<div class="osi-white" id="topics">
+  <section class="osi-wrap osi-section">
+    <div class="osi-head">
+      <div class="osi-label">{{ area.topicsLabel }}</div>
+      <h2 class="osi-h2">{{ area.topicsTitle }}</h2>
+    </div>
+    <div class="osi-grid{{ ' osi-grid--4' if area.cards.length == 4 }}">
+{%- for card in area.cards %}
+      <article class="osi-pillar" id="{{ card.id }}">
+        <h3><a href="{{ card.url }}">{{ card.title }}</a></h3>
+        <p>{{ card.summary | safe }}</p>
+        <a class="osi-link" href="{{ card.url }}">Read more<span class="osi-sr"> about {{ card.title }}</span></a>
+      </article>
+{%- endfor %}
+    </div>
+  </section>
+</div>
+{%- endif %}
+
+{{ parts.band(area.featured) }}
+
+{{ parts.latest(area.latest, 'Latest in ' + area.name) }}
+
+{%- if area.columns.length %}
+<section class="osi-wrap osi-section" id="activities">
+  <div class="osi-head">
+    <div class="osi-label">Activities</div>
+    <h2 class="osi-h2">{{ area.activitiesTitle }}</h2>
+  </div>
+  <div class="osi-grid{{ ' osi-grid--4' if area.columns.length == 4 }}">
+{%- for column in area.columns %}
+    <div class="osi-activity" id="{{ column.id }}">
+      <h3>{{ column.title }}</h3>
+      <ul>
+{%- for point in column.points %}
+        <li>{{ point | safe }}</li>
+{%- endfor %}
+      </ul>
+    </div>
+{%- endfor %}
+  </div>
+</section>
+{%- endif %}
+
+<div class="osi-white" id="people">
+  <section class="osi-wrap osi-section">
+    <div class="osi-head">
+      <div class="osi-label">Contacts</div>
+      <h2 class="osi-h2">{{ area.peopleTitle }}</h2>
+    </div>
+{%- if area.heads.length %}
+    <div class="osi-people">
+{%- for member in area.heads %}
+      <div class="osi-person">
+        {{ parts.avatar(member, true) }}
+        <div>
+          <div class="osi-person__role">Head of this area</div>
+          <div class="osi-person__name">{{ member.name }}</div>
+          <div class="osi-member__field">{{ member.expertise }}</div>
+        </div>
+      </div>
+{%- endfor %}
+    </div>
+{%- endif %}
+{%- if area.others.length %}
+    <ul class="osi-people osi-people--small">
+{%- for member in area.others %}
+      <li class="osi-person">{{ parts.avatar(member) }}<div><div class="osi-person__name">{{ member.name }}</div><div class="osi-member__field">{{ member.expertise }}</div></div></li>
+{%- endfor %}
+    </ul>
+{%- endif %}
+{%- if not area.people.length %}
+    <p class="osi-news__empty">The team of this area will be listed here.</p>
+{%- endif %}
+  </section>
+</div>
+
+{{ parts.join(area.join, site.contactEmail) }}
+{% endblock %}

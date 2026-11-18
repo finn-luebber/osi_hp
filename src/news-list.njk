@@ -1,0 +1,68 @@
+---
+pagination:
+  data: site.newsPages
+  size: 1
+  alias: listing
+permalink: "{{ listing.url }}"
+---
+{% extends "base.njk" %}
+{% set current = 'news' %}
+{% set pageTitle = 'News' %}
+{% set crumbs = [['/', 'Home'], [false, 'News']] %}
+{% block content %}
+<section class="osi-wrap osi-pagehead osi-pagehead--tight">
+  <div class="osi-label osi-label--accent">News</div>
+  <h1>{{ site.newsPage.title }}</h1>
+  <p>{{ site.newsPage.lead | safe }}</p>
+  <nav class="osi-filters" aria-label="Filter news">
+    <ul class="osi-chips">
+{%- for chip in site.chips %}
+      <li><a href="{{ chip.url }}"{{ ' aria-current="true"' | safe if chip.key == listing.filter }}>{{ chip.name }}</a></li>
+{%- endfor %}
+    </ul>
+  </nav>
+</section>
+
+<section class="osi-wrap osi-subsection">
+{%- if listing.items.length %}
+  <div class="osi-archive">
+{%- for item in listing.items %}
+    <article class="osi-archive__item{{ ' osi-archive__item--dated' if item.isEvent }}">
+{%- if item.isEvent %}
+      <time class="osi-event__date{{ ' osi-event__date--past' if item.eventPast }}" datetime="{{ item.eventStart }}" data-last="{{ item.eventLast }}"><span class="osi-event__day">{{ item.eventDay }}</span><span class="osi-event__month">{{ item.eventMonth }}</span></time>
+{%- endif %}
+      <div class="osi-archive__text">
+      <div class="osi-card__meta">
+        <time datetime="{{ item.date }}">{{ item.dateText }}</time>
+{%- for label in item.labels %}
+        <span class="osi-card__cat">{{ label.name }}</span>
+{%- endfor %}
+      </div>
+      <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+{%- if item.isEvent %}
+      <div class="osi-event__meta">{% for v in item.eventLine %}<span>{{ v }}</span>{% endfor %}</div>
+{%- endif %}
+{%- if item.summary %}
+      <p>{{ item.summary }}</p>
+{%- endif %}
+      </div>
+{%- if item.image %}
+      <a class="osi-archive__thumb" href="{{ item.url }}" tabindex="-1" aria-hidden="true"><img src="{{ item.image.thumb }}" alt="" loading="lazy"></a>
+{%- endif %}
+    </article>
+{%- endfor %}
+  </div>
+{%- if listing.pageLinks.length %}
+  <nav class="osi-pagination" aria-label="News pages">
+    <ul>
+{%- for p in listing.pageLinks %}
+      <li>{% if p.n == listing.page %}<span class="current" aria-current="page">{{ p.n }}</span>{% else %}<a href="{{ p.url }}">{{ p.n }}</a>{% endif %}</li>
+{%- endfor %}
+    </ul>
+  </nav>
+{%- endif %}
+{%- else %}
+  <p class="osi-news__empty">No news found.</p>
+{%- endif %}
+</section>
+{% endblock %}

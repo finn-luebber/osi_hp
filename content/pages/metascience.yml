@@ -1,0 +1,28 @@
+hero:
+  number: "03"
+  title: "Research on how research works"
+  lead: "Metascience examines the structures of the science system itself: how research is planned, published, evaluated and rewarded, and how this could work better."
+aside:
+  title: "In this area"
+topics:
+  label: "Topics"
+  title: "What this area covers"
+activities:
+  title: "What we do in this area"
+  columns:
+    - title: "Research"
+      points:
+        - "Publications on open science and metascience"
+        - "Open science surveys on campus, with a report to the university leadership"
+    - title: "Events"
+      points:
+        - "Talks at scientific conferences and contributions to panel discussions"
+        - "[UPCOMING EVENTS]"
+    - title: "Member activities"
+      points:
+        - "Studies and projects run by OSI members: [CURRENT ACTIVITIES]"
+people:
+  title: "People in this area"
+join:
+  title: "Working on metascience in Lübeck? Just email us."
+  text: "We are open to interested people from all levels and all backgrounds at the University of Lübeck."
