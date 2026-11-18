@@ -1,6 +1,6 @@
 # Editing the OSI Lübeck website
 
-Everything on the website is edited at **`<website address>/admin/`**. There is no link to it on the website, so bookmark it. Log in with your GitHub or GitLab account. Each time you save, the change is stored in the repository, and the website is updated **one to two minutes later**.
+Everything on the website is edited at **`<website address>/admin/`**. There is no link to it on the website, so bookmark it. Log in with your GitHub or GitLab account. On GitHub, the login lasts 8 hours; after that, log out and in again. Log out when you are done. Each time you save, the change is stored in the repository, and the website is updated **one to two minutes later**.
 
 ## Add a news item with a date and a picture
 

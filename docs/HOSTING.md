@@ -7,7 +7,7 @@ The repository runs in two versions: **(a) on GitHub** or **(b) on GitLab**. Bot
 | Build file | `.github/workflows/build.yml` | `.gitlab-ci.yml` |
 | Publishing | GitHub Pages | GitLab Pages, or your own web server |
 | Daily rebuild | built in (02:15 UTC) | one pipeline schedule to add |
-| Editor login | needs a small login service (included, runs on Cloudflare) | works directly (GitLab application) |
+| Editor login | GitHub App plus a small login service (included, runs on Cloudflare) | works directly (GitLab application) |
 | Extra security headers | not possible on GitHub Pages | possible on your own server |
 
 Both versions set the editor up by themselves from where the build runs: repository name, branch and login. You only enter the one login value named below.
@@ -45,24 +45,34 @@ git push -u origin main
 
 **Own domain** (for example `osi-luebeck.de`): Settings › Pages › Custom domain, and set the DNS record as GitHub explains there. Then add the variable `SITE_URL` = `https://osi-luebeck.de` (Settings › Secrets and variables › Actions › **Variables**).
 
-### 2. Editor login (login service)
+### 2. Editor login (GitHub App and login service)
 
-GitHub only hands out logins to a server that keeps a secret. `deploy/github-login/worker.js` is that server, about 80 lines, to run on Cloudflare Workers (free plan).
+The editor logs in through a **GitHub App**. Compared with an OAuth App, the key that an editor's browser receives is much weaker: it only reaches the repositories the app is installed on (here: only the website), it may only read and write files, and it stops working after 8 hours. GitHub only hands out such keys to a server that keeps a secret; `deploy/github-login/worker.js` is that server, to run on Cloudflare Workers (free plan).
 
-1. **GitHub OAuth app:** your account or organisation › Settings › Developer settings › **OAuth Apps › New OAuth App**.
-   - Homepage URL: the website address.
-   - Authorization callback URL: `https://<worker-name>.<your-subdomain>.workers.dev/callback` (from step 2; you can fill it in afterwards).
-   - Note the **Client ID** and create a **Client secret**.
-2. **Cloudflare Worker:** dash.cloudflare.com › Workers & Pages › **Create** › **Create Worker**, give it a name (for example `osi-login`) › **Deploy**. Then **Edit code**, replace everything with the content of `deploy/github-login/worker.js`, and **Deploy** again. The worker's address is shown at the top, for example `https://osi-login.<your-subdomain>.workers.dev`.
-   - Settings › Variables: `GITHUB_CLIENT_ID` (text), `GITHUB_CLIENT_SECRET` (**secret**), `ALLOWED_ORIGIN` = the website's origin, e.g. `https://osi-luebeck.github.io` or `https://osi-luebeck.de` (no path, no slash at the end).
-3. In the GitHub repository, add the variable **`DECAP_OAUTH_URL`** = the worker's address, e.g. `https://osi-login.example.workers.dev`.
-4. Run the workflow again. The build log shows `[osi] editing interface: github, <owner>/<repository>, branch main`.
-5. Give editors **Write** access to the repository (Settings › Collaborators and teams).
+1. **Create the GitHub App:** your account or organisation › Settings › Developer settings › **GitHub Apps › New GitHub App**.
+   - GitHub App name: e.g. `OSI website editor`. Homepage URL: the website address.
+   - Callback URL: `https://<worker-name>.<your-subdomain>.workers.dev/callback` (the worker's address from step 2; you can fill it in afterwards).
+   - **Expire user authorization tokens:** ticked (the default). **Request user authorization (OAuth) during installation:** not ticked.
+   - Webhook: untick **Active**.
+   - Permissions › Repository permissions › **Contents: Read and write**. Leave everything else at "No access" (Metadata: Read-only is set by GitHub itself).
+   - Where can this GitHub App be installed: **Only on this account**.
+   - Click **Create GitHub App**. Note the **Client ID** (starts with `Iv`; not the App ID) and click **Generate a new client secret**.
+2. **Install the app on the website repository only:** in the app's settings › **Install App** › your account › **Only select repositories** › choose the website repository › Install.
+3. **Cloudflare Worker:** dash.cloudflare.com › Workers & Pages › **Create** › **Create Worker**, give it a name (for example `osi-login`) › **Deploy**. Then **Edit code**, replace everything with the content of `deploy/github-login/worker.js`, and **Deploy** again. The worker's address is shown at the top, for example `https://osi-login.<your-subdomain>.workers.dev`.
+   - Settings › Variables and Secrets:
+     - `GITHUB_CLIENT_ID`: the app's Client ID
+     - `GITHUB_CLIENT_SECRET`: the client secret, added as type **Secret**
+     - `ALLOWED_ORIGIN`: the website's origin, e.g. `https://osi-luebeck.github.io` or `https://osi-luebeck.de` (no path, no slash at the end)
+     - `GITHUB_REPOSITORY`: the website repository, e.g. `osi-luebeck/website`; logins without write access to it are refused
+4. In the GitHub repository, add the variable **`DECAP_OAUTH_URL`** = the worker's address (Settings › Secrets and variables › Actions › Variables).
+5. Run the workflow again. The build log shows `[osi] editing interface: github, <owner>/<repository>, branch main`.
+6. Give editors **Write** access to the repository (Settings › Collaborators and teams).
 
-Editors then open `/admin/` (there is no link to it on the site; bookmark it) and click **Login with GitHub**.
+Editors then open `/admin/` (there is no link to it on the site; bookmark it) and click **Login with GitHub**. The first time, GitHub asks them to authorise the app. After 8 hours the key expires; the editor then has to log in again.
 
-> The login service has not been tested against GitHub on our side. If you prefer not to run it, editors can still edit through GitHub's own web editor (press `.` in the repository) or on their own computer (see "On your own computer").
+**If you set up an OAuth App before:** delete it (Settings › Developer settings › OAuth Apps › the app › Delete application). This also cancels every key it handed out.
 
+> The login service was tested with simulated GitHub answers, not against GitHub itself. If you prefer not to run it, editors can still edit through GitHub's own web editor (press `.` in the repository) or on their own computer (see "On your own computer").
 ---
 
 ## (b) GitLab
@@ -143,6 +153,7 @@ Normally not needed; for special cases (another branch, a mirror, testing):
 - Every page carries a strict content security policy: only scripts, styles, fonts and pictures from the site itself. On your own server, the `.htaccess` (Apache) or nginx rules add it as a header too, with HTTPS enforcement and further protective headers.
 - Pictures are decoded and saved again during the build, so camera and location data never reach the site.
 - The editor at `/admin/` is served from the site itself (Decap CMS 3.17.3, no outside scripts). It needs a looser rule (it evaluates generated code) and may contact only the Git host. Logins and permissions are those of GitHub or GitLab, including two-factor login.
+- **The key in the editor's browser.** Like every browser-based Git editor, the editor keeps a key in the browser while someone is logged in. On GitHub it comes from a GitHub App and only reaches the website repository, only for files, for 8 hours; the login service keeps the refresh key back. On GitLab, keep the editor's application at scope `api` and limit editors' accounts to the projects they need; GitLab's keys also expire after a short time. Logging out removes the key from the browser.
 - Who may change the site is decided in the repository's members list. Remove people who leave.
 
 ## Updating the tools
@@ -157,7 +168,9 @@ Versions are fixed in `package.json` and `package-lock.json`, so builds stay ide
 | "Problem(s) in content" in the log, site still built | The named file has a mistake (missing date, picture not found …); the site was built without that part. |
 | Editor shows "Error loading the CMS configuration" | A mistake in `admin/cms.yml`; the message names the line. |
 | Editor login fails (GitLab) | Redirect URI must match the address of `/admin/` exactly, including the trailing `/`. |
-| Editor login fails (GitHub) | Check the three worker variables and `DECAP_OAUTH_URL`; `ALLOWED_ORIGIN` without trailing slash. |
+| Editor login fails (GitHub) | Check the four worker variables and `DECAP_OAUTH_URL`; `ALLOWED_ORIGIN` without trailing slash; the app's Callback URL ends in `/callback`; the app is installed on the website repository. |
+| GitHub login says "may not edit this website" | The account has no write access to the repository, or the GitHub App is not installed on it. |
+| Editor suddenly shows errors when saving (GitHub) | The 8-hour key has expired. Log out (top right) and log in again. |
 | GitHub: "Login with GitHub" opens a window at api.netlify.com saying "Not found" | The variable `DECAP_OAUTH_URL` was missing when the site was built (version 1.0.3 and earlier). Set up the login service (part (a), step 2) and run the workflow again. From version 1.0.4 on, `/admin/` shows what is missing instead. |
 | GitHub: "Get Pages site failed … Not Found" | Pages is not switched on for GitHub Actions yet; see part (a), step 1, then re-run the workflow. |
 | Links broken on GitHub/GitLab Pages | The build sets `PATH_PREFIX` itself; if you changed the build file, make sure it still does. |

@@ -1,6 +1,6 @@
 # OSI Lübeck website (static version)
 
-**Version 1.0.4.**
+**Version 1.1.0.**
 
 The public website of the Open Science Initiative Lübeck, built as plain files from the content in this Git repository. It looks and reads exactly like the earlier PHP version; only the way content is stored and published changed.
 
@@ -66,7 +66,8 @@ On the developer's machine, not on your servers:
 - **Code:** HTML of all pages checked with html-validate; all 1,251 internal links and jump marks resolve; accessibility audit (axe, WCAG 2.1 AA) without findings; no page wider than the screen at eight widths from 320 to 1920 pixels.
 - **Content mistakes:** odd picture names (spaces, umlauts, upper-case endings), unsafe link addresses, a last day before the first day, a missing date and a reserved box name are handled and reported; phone photos are turned upright and lose their location data.
 - **Editor:** under its security rule, against a local copy: uploading a picture, adding a news item with a date, picture, area and labels, a team member, a box with a link button, a point in an activity column, and editing an existing entry; every change appeared correctly after the build. The generated settings for GitHub and for GitLab were loaded in the editor without errors.
-- **Not tested:** logging in through GitHub (with the login service) or GitLab, the GitHub workflow and GitLab pipeline themselves, GitHub/GitLab Pages, and the Apache and nginx rules.
+- **GitHub login service:** tested with simulated GitHub answers: login without asking for broad access, refusal and withdrawal of keys for accounts without write access or where the app is not installed, refresh key never passed on, forged or cancelled logins refused.
+- **Not tested:** logging in through GitHub (with the GitHub App and login service) or GitLab against the real services, the GitHub workflow and GitLab pipeline themselves, GitHub/GitLab Pages, and the Apache and nginx rules.
 
 ## Known limitations
 
