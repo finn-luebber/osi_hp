@@ -1,6 +1,6 @@
 {
   "name": "osi-luebeck-website",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "private": true,
   "description": "Static website of the Open Science Initiative Lübeck. Content lives in content/, the build writes the finished site to _site/. Runs on GitHub or GitLab, see docs/HOSTING.md.",
   "type": "module",

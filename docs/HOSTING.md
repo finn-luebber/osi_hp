@@ -37,7 +37,9 @@ git push -u origin main
 
 ### 1. Publish with GitHub Pages
 
-1. Repository › **Settings › Pages** › Build and deployment › Source: **GitHub Actions**.
+1. **Before the first run:** Repository › **Settings › Pages** › Build and deployment › Source: **GitHub Actions**.
+   - If you pushed first, the first run fails at "Configure Pages" with *Get Pages site failed … Not Found*. Set the source as above, then open **Actions**, click the failed run and choose **Re-run all jobs**.
+   - If the Pages settings offer no "Source", the repository is probably private: on GitHub's free plan, Pages only works for public repositories.
 2. Repository › **Actions**: the workflow "Build and publish" runs after every push, every night, and when started by hand ("Run workflow").
 3. The site appears at `https://<owner>.github.io/<repository>/`. All links follow that sub-folder automatically.
 
@@ -51,7 +53,7 @@ GitHub only hands out logins to a server that keeps a secret. `deploy/github-log
    - Homepage URL: the website address.
    - Authorization callback URL: `https://<worker-name>.<your-subdomain>.workers.dev/callback` (from step 2; you can fill it in afterwards).
    - Note the **Client ID** and create a **Client secret**.
-2. **Cloudflare Worker:** dash.cloudflare.com › Workers & Pages › Create › Worker › paste the content of `deploy/github-login/worker.js` › Deploy.
+2. **Cloudflare Worker:** dash.cloudflare.com › Workers & Pages › **Create** › **Create Worker**, give it a name (for example `osi-login`) › **Deploy**. Then **Edit code**, replace everything with the content of `deploy/github-login/worker.js`, and **Deploy** again. The worker's address is shown at the top, for example `https://osi-login.<your-subdomain>.workers.dev`.
    - Settings › Variables: `GITHUB_CLIENT_ID` (text), `GITHUB_CLIENT_SECRET` (**secret**), `ALLOWED_ORIGIN` = the website's origin, e.g. `https://osi-luebeck.github.io` or `https://osi-luebeck.de` (no path, no slash at the end).
 3. In the GitHub repository, add the variable **`DECAP_OAUTH_URL`** = the worker's address, e.g. `https://osi-login.example.workers.dev`.
 4. Run the workflow again. The build log shows `[osi] editing interface: github, <owner>/<repository>, branch main`.
@@ -156,4 +158,6 @@ Versions are fixed in `package.json` and `package-lock.json`, so builds stay ide
 | Editor shows "Error loading the CMS configuration" | A mistake in `admin/cms.yml`; the message names the line. |
 | Editor login fails (GitLab) | Redirect URI must match the address of `/admin/` exactly, including the trailing `/`. |
 | Editor login fails (GitHub) | Check the three worker variables and `DECAP_OAUTH_URL`; `ALLOWED_ORIGIN` without trailing slash. |
+| GitHub: "Login with GitHub" opens a window at api.netlify.com saying "Not found" | The variable `DECAP_OAUTH_URL` was missing when the site was built (version 1.0.3 and earlier). Set up the login service (part (a), step 2) and run the workflow again. From version 1.0.4 on, `/admin/` shows what is missing instead. |
+| GitHub: "Get Pages site failed … Not Found" | Pages is not switched on for GitHub Actions yet; see part (a), step 1, then re-run the workflow. |
 | Links broken on GitHub/GitLab Pages | The build sets `PATH_PREFIX` itself; if you changed the build file, make sure it still does. |

@@ -1,6 +1,6 @@
 # OSI Lübeck website (static version)
 
-**Version 1.0.2.**
+**Version 1.0.4.**
 
 The public website of the Open Science Initiative Lübeck, built as plain files from the content in this Git repository. It looks and reads exactly like the earlier PHP version; only the way content is stored and published changed.
 
