@@ -10,7 +10,7 @@ const pathPrefix = process.env.PATH_PREFIX || '/';
 export default function (eleventyConfig) {
   eleventyConfig.addPlugin(HtmlBasePlugin);
   eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });
-  eleventyConfig.addPassthroughCopy({ 'admin/decap': 'admin/decap' });
+  eleventyConfig.addPassthroughCopy({ 'admin/decap': 'admin/decap', 'admin/session-guard.js': 'admin/session-guard.js' });
   // web server rules for Apache (ignored by other servers)
   eleventyConfig.addPassthroughCopy({ 'deploy/apache/htaccess': '.htaccess' });
   eleventyConfig.addWatchTarget('content/');
