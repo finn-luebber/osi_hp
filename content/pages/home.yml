@@ -49,6 +49,11 @@ activities:
         - Open Science Awards
         - Press coverage in Die Zeit, Times Higher Education, Spiegel and
           Tagesspiegel
+    - title: Funding and network
+      points:
+        - "We are partially supported by the University of Lübeck and apply for
+          third party funding for our metascience research.   "
+        - We connect with national and international networks.
 boxes:
   - label: Office hour
     title: Every last Friday of the month
