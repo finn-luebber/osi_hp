@@ -2,6 +2,7 @@
 name: Sören Krach
 expertise: Metascience, Funding, Citizen Science
 institute: Department of Psychiatry and Psychotherapy
+photo: /uploads/krach.jpg
 order: 1
 area_open_science: none
 area_citizen_science: head
