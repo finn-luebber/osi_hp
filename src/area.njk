@@ -17,15 +17,7 @@ permalink: "{{ area.url }}"
     <h1 class="osi-hero__title">{{ area.hero.title }}</h1>
     <p class="osi-hero__lead">{{ area.hero.lead | safe }}</p>
   </div>
-  <aside class="osi-why">
-    <h2 class="osi-why__title"><strong>{{ area.asideTitle }}</strong></h2>
-    <ul>
-{%- for card in area.cards %}
-      <li><a href="#{{ card.id }}">{{ card.title }}</a></li>
-{%- endfor %}
-      <li><a href="#people">{{ area.peopleTitle }}</a></li>
-    </ul>
-  </aside>
+{{ parts.eventsBox(area.eventsBox, area.upcoming, area.datesUrl) }}
 </section>
 
 {%- if area.cards.length %}

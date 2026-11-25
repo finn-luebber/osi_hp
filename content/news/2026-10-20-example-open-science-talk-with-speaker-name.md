@@ -5,8 +5,9 @@ summary: "An example of a news item that is tied to a date."
 image: "/uploads/talk.png"
 image_alt: "Abstract pattern (demo picture)"
 labels: "Events"
-areas:
-  - "open-science"
+show_on:
+  - home
+  - open-science
 featured: false
 draft: false
 date_to_remember: true

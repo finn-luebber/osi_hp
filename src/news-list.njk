@@ -14,6 +14,9 @@ permalink: "{{ listing.url }}"
   <div class="osi-label osi-label--accent">News</div>
   <h1>{{ site.newsPage.title }}</h1>
   <p>{{ site.newsPage.lead | safe }}</p>
+{%- if listing.dates %}
+  <p class="osi-news__note">Dates and events in {{ site.sections[listing.filter | replace('area:', '')] }}, what is coming up first.</p>
+{%- endif %}
   <nav class="osi-filters" aria-label="Filter news">
     <ul class="osi-chips">
 {%- for chip in site.chips %}

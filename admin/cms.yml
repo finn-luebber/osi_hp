@@ -16,7 +16,7 @@ _shared:
   areas: &areas
     - { label: "Open Science", value: open-science }
     - { label: "Citizen Science", value: citizen-science }
-    - { label: "Metascience", value: metascience }
+    - { label: "Meta Science", value: metascience }
   inline_hint: &inline "Links: `[link text](https://address)` · bold: `**text**` · italics: `*text*`"
   join: &join
     label: "Contact section at the bottom"
@@ -63,7 +63,7 @@ collections:
       - { label: "Text", name: body, widget: markdown, required: false, buttons: [bold, italic, link, heading-two, bulleted-list], editor_components: [image] }
       - { label: "Featured image", name: image, widget: image, required: false, choose_url: false, hint: "Best size 1600 × 900 pixels (16:9), main subject in the middle" }
       - { label: "Description of the featured image", name: image_alt, widget: string, required: false }
-      - { label: "Areas", name: areas, widget: select, multiple: true, required: false, options: *areas, hint: "The news also appears on the pages of these areas" }
+      - { label: "Show on", name: show_on, widget: select, multiple: true, min: 1, default: [home], options: [{ label: "Home", value: home }, { label: "Open Science", value: open-science }, { label: "Citizen Science", value: citizen-science }, { label: "Meta Science", value: metascience }], hint: "Choose one or more. The news appears in the latest-news box of each page chosen, and – if it has a date to remember – in that page’s Upcoming box. The full News list always shows it." }
       - { label: "Labels", name: labels, widget: string, required: false, hint: "Separate with commas, for example: Events, Publications" }
       - { label: "Show in the Featured band", name: featured, widget: boolean, default: false, required: false }
       - { label: "Draft (not shown on the site)", name: draft, widget: boolean, default: false, required: false }
@@ -92,12 +92,12 @@ collections:
       - { label: "Order", name: order, widget: number, value_type: int, default: 100, hint: "Lower numbers come first" }
       - { label: "Open Science", name: area_open_science, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }], hint: "A member can belong to several areas and head more than one" }
       - { label: "Citizen Science", name: area_citizen_science, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }] }
-      - { label: "Metascience", name: area_metascience, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }] }
+      - { label: "Meta Science", name: area_metascience, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }] }
       - { label: "Hide from the site", name: hidden, widget: boolean, default: false, required: false }
 
   - { name: topics-open-science, label: "Open Science: boxes", label_singular: "box", folder: content/topics/open-science, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }
   - { name: topics-citizen-science, label: "Citizen Science: boxes", label_singular: "box", folder: content/topics/citizen-science, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }
-  - { name: topics-metascience, label: "Metascience: boxes", label_singular: "box", folder: content/topics/metascience, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }
+  - { name: topics-metascience, label: "Meta Science: boxes", label_singular: "box", folder: content/topics/metascience, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }
 
   - name: pages
     label: "Page texts"
@@ -119,7 +119,7 @@ collections:
           - label: "Upcoming box next to the opening"
             name: events_box
             widget: object
-            hint: "Lists the next three dates by itself, from news marked as a date to remember"
+            hint: "Lists the next three dates by itself, from news that have a date to remember and are shown on Home"
             fields:
               - { label: "Headline", name: title, widget: string }
               - { label: "Text when nothing is coming up", name: empty, widget: string }
@@ -132,7 +132,7 @@ collections:
               - { label: "Headline", name: title, widget: string }
               - { label: "Open Science column", name: open-science, widget: object, fields: [{ label: "Text", name: text, widget: text, hint: *inline }] }
               - { label: "Citizen Science column", name: citizen-science, widget: object, fields: [{ label: "Text", name: text, widget: text, hint: *inline }] }
-              - { label: "Metascience column", name: metascience, widget: object, fields: [{ label: "Text", name: text, widget: text, hint: *inline }] }
+              - { label: "Meta Science column", name: metascience, widget: object, fields: [{ label: "Text", name: text, widget: text, hint: *inline }] }
           - { label: "News section", name: news, widget: object, fields: [{ label: "Headline", name: title, widget: string }] }
           - label: "Activities"
             name: activities
@@ -163,13 +163,20 @@ collections:
               - { label: "Number before the area name", name: number, widget: string, required: false }
               - { label: "Headline", name: title, widget: string }
               - { label: "Introduction", name: lead, widget: text, hint: *inline }
-          - { label: "Box next to the opening", name: aside, widget: object, hint: "It lists the boxes of this area and the people section by itself", fields: [{ label: "Headline", name: title, widget: string }] }
+          - label: "Upcoming box next to the opening"
+            name: events_box
+            widget: object
+            hint: "Lists the next three dates by itself, from news that have a date to remember and are shown on this area"
+            fields:
+              - { label: "Headline", name: title, widget: string }
+              - { label: "Text when nothing is coming up", name: empty, widget: string }
+              - { label: "Text of the link below the list", name: all, widget: string }
           - { label: "Section with the boxes", name: topics, widget: object, hint: "The boxes themselves are edited under “Open Science: boxes” and so on", fields: [{ label: "Small label above the headline", name: label, widget: string }, { label: "Headline", name: title, widget: string }] }
           - { label: "Activities", name: activities, widget: object, fields: [{ label: "Headline", name: title, widget: string }, *columns] }
           - { label: "People section", name: people, widget: object, hint: "The people come from Team", fields: [{ label: "Headline", name: title, widget: string }] }
           - *join
       - { <<: *area_page, label: "Citizen Science page", name: citizen-science, file: content/pages/citizen-science.yml }
-      - { <<: *area_page, label: "Metascience page", name: metascience, file: content/pages/metascience.yml }
+      - { <<: *area_page, label: "Meta Science page", name: metascience, file: content/pages/metascience.yml }
       - label: "Team page"
         name: team
         file: content/pages/team.yml

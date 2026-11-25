@@ -2,8 +2,10 @@ hero:
   number: "01"
   title: "The technical core of open research"
   lead: "Open access, open data and research data management are the practical foundations of open science. We collect information and activities around them on campus, and run the Open Science Talks and the Open Science Award."
-aside:
-  title: "In this area"
+events_box:
+  title: "Upcoming events"
+  empty: "No upcoming dates in Open Science at the moment."
+  all: "All dates in Open Science"
 topics:
   label: "Topics"
   title: "What this area covers"

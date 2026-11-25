@@ -1,9 +1,11 @@
 hero:
   number: "03"
   title: "Research on how research works"
-  lead: "Metascience examines the structures of the science system itself: how research is planned, published, evaluated and rewarded, and how this could work better."
-aside:
-  title: "In this area"
+  lead: "Meta Science examines the structures of the science system itself: how research is planned, published, evaluated and rewarded, and how this could work better."
+events_box:
+  title: "Upcoming events"
+  empty: "No upcoming dates in Meta Science at the moment."
+  all: "All dates in Meta Science"
 topics:
   label: "Topics"
   title: "What this area covers"
@@ -24,5 +26,5 @@ activities:
 people:
   title: "People in this area"
 join:
-  title: "Working on metascience in Lübeck? Just email us."
+  title: "Working on meta science in Lübeck? Just email us."
   text: "We are open to interested people from all levels and all backgrounds at the University of Lübeck."

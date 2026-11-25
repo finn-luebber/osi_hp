@@ -5,8 +5,9 @@ summary: "A new series of manuscripts reports the primary outcome of the SCORE p
 image: "/uploads/score-manuscripts.png"
 image_alt: "Abstract pattern (demo picture)"
 labels: "Publications"
-areas:
-  - "metascience"
+show_on:
+  - home
+  - metascience
 featured: true
 draft: false
 ---

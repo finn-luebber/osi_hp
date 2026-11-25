@@ -156,7 +156,7 @@ foreach (news_list(['published' => false]) as $n) {
     if ($n['teaser'] !== '') $meta['summary'] = $n['teaser'];
     if ($p = $pic($n['image'])) { $meta['image'] = $p['path']; $meta['image_alt'] = $p['alt']; }
     $meta['labels'] = implode(', ', array_column($n['labels'], 'name'));
-    $meta['areas']  = $n['sections'];
+    $meta['show_on'] = array_merge(['home'], $n['sections']);
     $meta['featured'] = (bool) $n['featured'];
     $meta['draft']    = $n['status'] !== 'published';
     if ($n['is_event']) {

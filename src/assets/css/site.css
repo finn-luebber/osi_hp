@@ -220,7 +220,7 @@ html { scroll-padding-top: calc(var(--osi-header) + 12px); scroll-behavior: smoo
 .site .osi-pagination a, .site .osi-pagination span { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0 12px; border: 1px solid var(--osi-line); background: #FFFFFF; text-decoration: none; font-weight: 500; }
 .site .osi-pagination .current { background: var(--osi-petrol); border-color: var(--osi-petrol); color: #FFFFFF; }
 
-/* ---- Area subpages (Open Science, Citizen Science, Metascience) ---- */
+/* ---- Area subpages (Open Science, Citizen Science, Meta Science) ---- */
 .site .osi-pillar h3 a { color: inherit; text-decoration: none; }
 .site .osi-pillar h3 a:hover, .site .osi-pillar h3 a:focus { color: var(--osi-petrol); text-decoration: underline; }
 .site .osi-pillar .osi-link { margin-top: auto; align-self: flex-start; }
@@ -340,3 +340,4 @@ html { scroll-padding-top: calc(var(--osi-header) + 12px); scroll-behavior: smoo
 
 /* Parts the build prepares but hides until needed (for example upcoming dates that move up) */
 .site [hidden] { display: none !important; }
+.site .osi-news__note { font-family: var(--osi-mono); font-size: 13px; color: var(--osi-orange-text); }

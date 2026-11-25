@@ -11,17 +11,17 @@ Everything on the website is edited at **`<website address>/admin/`**. There is 
 3. **New news item:** in **News**, click **+ News item**.
 4. **Fill in the basics:** title, publication date (usually today), short summary (one or two sentences), and the text.
 5. **Featured image:** **Choose an image**, click your picture, **Choose selected**. Then write a short **description** of what the picture shows.
-6. **Areas and labels:** choose the areas the news belongs to (it then also appears on those pages). Labels are words separated by commas, for example `Events, Workshops`.
+6. **Show on and labels:** choose where the news appears: **Home** is preset; add **Open Science**, **Citizen Science** and/or **Meta Science** as needed (one to four places; remove Home with its × if it should not be on the homepage). Labels are words separated by commas, for example `Events, Workshops`.
 7. **The date to remember:** switch on **Date to remember**, choose the **kind** (talk, workshop, conference, deadline, award ceremony, event), enter the **date** (for a deadline: the last day), and if needed the **last day**, **time** and **place**.
 8. **Publish:** click **Publish › Publish now**. "Entry saved" confirms it.
 
 About two minutes later:
 
-- the news appears at the top of **News** and on the pages of its areas,
-- until the date has passed, it can appear in the **Upcoming** box on the homepage (the next three dates),
+- the news appears at the top of **News**, and in the latest-news box of every place chosen under **Show on**,
+- until the date has passed, it can appear in the **Upcoming** box of every place chosen: the homepage and/or the pages of the chosen areas (each box lists its next three dates),
 - on the News page it shows the date in a block on the left, which turns grey once the date has passed.
 
-To show it in the large **Featured** band on the homepage, switch on **Show in the Featured band**. A news item marked **Draft** is saved but not shown.
+To show it in the large **Featured** band, switch on **Show in the Featured band**; it then appears in the band of every place chosen under **Show on**. A news item marked **Draft** is saved but not shown.
 
 ## Other content
 

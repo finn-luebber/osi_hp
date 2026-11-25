@@ -3,8 +3,9 @@ title: "Example: OSI members at [CONFERENCE NAME]"
 date: "2026-09-01"
 summary: "An example of a news item that is tied to a date."
 labels: "Events"
-areas:
-  - "metascience"
+show_on:
+  - home
+  - metascience
 featured: false
 draft: false
 date_to_remember: true

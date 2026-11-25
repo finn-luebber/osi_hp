@@ -3,7 +3,8 @@ title: "Example: past talk with [SPEAKER NAME]"
 date: "2026-08-01"
 summary: "An example of a news item that is tied to a date."
 labels: "Events"
-areas: []
+show_on:
+  - home
 featured: false
 draft: false
 date_to_remember: true

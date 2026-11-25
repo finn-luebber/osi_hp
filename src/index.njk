@@ -20,16 +20,7 @@ permalink: /
 {%- endif %}
     </div>
   </div>
-  <aside class="osi-why osi-eventsbox">
-    <h2 class="osi-why__title"><a href="/news/dates/">{{ h.eventsBox.title }}</a></h2>
-    <ul{{ ' hidden' if not h.upcoming.length }}>
-{%- for item in h.upcoming %}
-      <li data-last="{{ item.eventLast }}"{{ ' hidden' if loop.index > 3 }}><time datetime="{{ item.eventStart }}">{{ item.eventShort }} · {{ item.eventTypeName }}</time><a href="{{ item.url }}">{{ item.title }}</a></li>
-{%- endfor %}
-    </ul>
-    <p class="osi-eventsbox__empty"{{ ' hidden' if h.upcoming.length }}>{{ h.eventsBox.empty }}</p>
-    <a class="osi-link" href="/news/dates/">{{ h.eventsBox.all }}</a>
-  </aside>
+{{ parts.eventsBox(h.eventsBox, h.upcoming, h.datesUrl) }}
 </section>
 
 <div id="pillars" class="osi-white">

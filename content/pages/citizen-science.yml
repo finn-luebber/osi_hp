@@ -2,8 +2,10 @@ hero:
   number: "02"
   title: "Research with and for society"
   lead: "Science communication and participation bring research and the public together. We collect the offers that already exist in Lübeck, link to them, and point to events and studies run by our members."
-aside:
-  title: "In this area"
+events_box:
+  title: "Upcoming events"
+  empty: "No upcoming dates in Citizen Science at the moment."
+  all: "All dates in Citizen Science"
 topics:
   label: "Offers and projects"
   title: "Taking part in science in Lübeck"

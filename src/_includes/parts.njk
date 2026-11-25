@@ -72,3 +72,16 @@
   <a class="osi-btn osi-btn--large" href="mailto:{{ email }}">{{ email }}</a>
 </section>
 {% endmacro %}
+
+{% macro eventsBox(box, items, datesUrl) %}
+  <aside class="osi-why osi-eventsbox">
+    <h2 class="osi-why__title"><a href="{{ datesUrl }}">{{ box.title }}</a></h2>
+    <ul{{ ' hidden' if not items.length }}>
+{%- for item in items %}
+      <li data-last="{{ item.eventLast }}"{{ ' hidden' if loop.index > 3 }}><time datetime="{{ item.eventStart }}">{{ item.eventShort }} · {{ item.eventTypeName }}</time><a href="{{ item.url }}">{{ item.title }}</a></li>
+{%- endfor %}
+    </ul>
+    <p class="osi-eventsbox__empty"{{ ' hidden' if items.length }}>{{ box.empty }}</p>
+    <a class="osi-link" href="{{ datesUrl }}">{{ box.all }}</a>
+  </aside>
+{% endmacro %}

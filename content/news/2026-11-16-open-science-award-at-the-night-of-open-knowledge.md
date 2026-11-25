@@ -5,8 +5,9 @@ summary: "The University of Lübeck Open Science Award honours a project from re
 image: "/uploads/night-of-open-knowledge.png"
 image_alt: "Abstract pattern (demo picture)"
 labels: "Events"
-areas:
-  - "open-science"
+show_on:
+  - home
+  - open-science
 featured: true
 draft: false
 ---

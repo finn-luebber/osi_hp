@@ -3,8 +3,9 @@ title: "Example: applications for the Open Science Award close"
 date: "2026-10-05"
 summary: "An example of a news item that is tied to a date."
 labels: "Events"
-areas:
-  - "open-science"
+show_on:
+  - home
+  - open-science
 featured: false
 draft: false
 date_to_remember: true

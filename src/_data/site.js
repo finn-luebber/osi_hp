@@ -11,7 +11,9 @@ import sharp from 'sharp';
 const ROOT = process.cwd();
 const CONTENT = path.join(ROOT, 'content');
 
-const SECTIONS = { 'open-science': 'Open Science', 'citizen-science': 'Citizen Science', 'metascience': 'Metascience' };
+const SECTIONS = { 'open-science': 'Open Science', 'citizen-science': 'Citizen Science', 'metascience': 'Meta Science' };
+/** Where a news item can appear: the homepage and the three areas (one or more). */
+const PLACES = ['home', ...Object.keys(SECTIONS)];
 const EVENT_TYPES = { talk: 'Talk', workshop: 'Workshop', conference: 'Conference', deadline: 'Deadline', award: 'Award ceremony', other: 'Event' };
 const NEWS_PER_PAGE = 9;
 const RESERVED_IDS = ['topics', 'activities', 'people', 'join', 'latest-news', 'main', 'pillars'];
@@ -154,6 +156,21 @@ function safeUrl(url, where) {
 }
 const linkOf = (l, where) => { const url = safeUrl(l?.url, where); return { text: str(l?.text) || url, url }; };
 
+/* ---------- where a news item appears ---------- */
+
+/**
+ * "show_on" lists the places: home, open-science, citizen-science, metascience (one or more).
+ * Older files only had "areas"; they appeared on the homepage as well, and still do.
+ */
+function placesOf(meta, file) {
+  const known = (p) => { if (PLACES.includes(p)) return true; warn(file, `unknown place "${p}" in show_on`); return false; };
+  const places = meta.show_on !== undefined
+    ? [...new Set(list(meta.show_on).map(str).filter(known))]
+    : ['home', ...list(meta.areas).filter((a) => SECTIONS[a])];
+  if (!places.length) warn(file, 'show_on is empty; the news only appears in the full News list');
+  return { places, areas: places.filter((p) => SECTIONS[p]) };
+}
+
 /* ---------- privacy policy: the hosting paragraph fits where the site is hosted ---------- */
 
 function hostingParagraph() {
@@ -208,7 +225,7 @@ export default async function () {
       title: str(meta.title), date, dateText: fmtDate(date), summary: str(meta.summary), body: block(body),
       image: picture(meta.image, file, meta.image_alt),
       labels: [...new Map((typeof meta.labels === 'string' ? meta.labels.split(',') : list(meta.labels)).map(str).filter(Boolean).map((name) => [slugify(name), { name, slug: slugify(name) }])).values()],
-      areas: list(meta.areas).filter((a) => SECTIONS[a]), featured: meta.featured === true, draft: meta.draft === true,
+      ...placesOf(meta, file), featured: meta.featured === true, draft: meta.draft === true,
       isEvent: Boolean(ev && start),
     };
     if (item.isEvent) {
@@ -231,9 +248,12 @@ export default async function () {
   const used = new Set();
   for (const n of news) { let s = n.slug; for (let i = 2; used.has(s); i++) s = `${n.slug}-${i}`; n.slug = s; used.add(s); n.url = `/news/${s}/`; }
 
-  const featuredFor = (area) => news.find((n) => n.featured && (!area || n.areas.includes(area))) || null;
-  const latestFor = (area) => news.filter((n) => !area || n.areas.includes(area)).slice(0, 3);
+  // place: 'home' or an area. A news item shows up in the boxes of every place chosen for it.
+  const at = (place) => (n) => n.places.includes(place);
+  const featuredFor = (place) => news.find((n) => n.featured && at(place)(n)) || null;
+  const latestFor = (place) => news.filter(at(place)).slice(0, 3);
   const upcoming = news.filter((n) => n.isEvent && !n.eventPast).sort((a, b) => a.eventStart.localeCompare(b.eventStart) || a.slug.localeCompare(b.slug));
+  const upcomingFor = (place) => upcoming.filter(at(place)).slice(0, 8);   // three are shown; the rest stand by in case dates pass before the next build
   const dated = [...upcoming, ...news.filter((n) => n.isEvent && n.eventPast).sort((a, b) => b.eventStart.localeCompare(a.eventStart))];
 
   /* labels and the pages of the News list */
@@ -242,6 +262,7 @@ export default async function () {
     { key: 'all', base: '/news/', items: news },
     { key: 'dates', base: '/news/dates/', items: dated },
     ...Object.keys(SECTIONS).map((a) => ({ key: `area:${a}`, base: `/news/area/${a}/`, items: news.filter((n) => n.areas.includes(a)) })),
+    ...Object.keys(SECTIONS).map((a) => ({ key: `area:${a}`, base: `/news/area/${a}/dates/`, items: dated.filter((n) => n.areas.includes(a)), dates: true })),
     ...labels.map((l) => ({ key: `label:${l.slug}`, base: `/news/label/${l.slug}/`, items: news.filter((n) => n.labels.some((x) => x.slug === l.slug)) })),
   ];
   const chips = [
@@ -254,7 +275,7 @@ export default async function () {
     const pages = Math.max(1, Math.ceil(f.items.length / NEWS_PER_PAGE));
     const urlOf = (p) => (p === 1 ? f.base : `${f.base}page/${p}/`);
     for (let p = 1; p <= pages; p++) {
-      newsPages.push({ url: urlOf(p), filter: f.key, items: f.items.slice((p - 1) * NEWS_PER_PAGE, p * NEWS_PER_PAGE), page: p,
+      newsPages.push({ url: urlOf(p), filter: f.key, dates: f.dates === true, items: f.items.slice((p - 1) * NEWS_PER_PAGE, p * NEWS_PER_PAGE), page: p,
         pageLinks: pages > 1 ? Array.from({ length: pages }, (_, i) => ({ n: i + 1, url: urlOf(i + 1) })) : [] });
     }
   }
@@ -282,7 +303,8 @@ export default async function () {
       activitiesTitle: str(c.activities?.title), columns: columnsWithIds(c.activities?.columns, cards.map((t) => t.id)),
       peopleTitle: str(c.people?.title), join: { title: str(c.join?.title), text: inline(c.join?.text) },
       people: membersFor(slug), heads: membersFor(slug, true), others: membersFor(slug).filter((m) => !m.sections[slug]),
-      featured: featuredFor(slug), latest: latestFor(slug),
+      featured: featuredFor(slug), latest: latestFor(slug), upcoming: upcomingFor(slug),
+      eventsBox: { title: str(c.events_box?.title), empty: str(c.events_box?.empty), all: str(c.events_box?.all) }, datesUrl: `/news/area/${slug}/dates/`,
     });
   }
 
@@ -297,8 +319,7 @@ export default async function () {
     columns: columnsWithIds(h.activities?.columns, []),
     boxes: list(h.boxes).map((b) => ({ label: str(b.label), title: str(b.title), text: inline(b.text), link: linkOf(b.link, 'content/pages/home.yml') })),
     join: { title: str(h.join?.title), text: inline(h.join?.text) },
-    featured: featuredFor(null), latest: latestFor(null),
-    upcoming: upcoming.slice(0, 8),   // three are shown; the rest stand by in case dates pass before the next build
+    featured: featuredFor('home'), latest: latestFor('home'), upcoming: upcomingFor('home'), datesUrl: '/news/dates/',
   };
 
   const t = page('team'); const nw = page('news');

@@ -3,7 +3,8 @@ title: "Example: workshop on preregistration"
 date: "2026-09-15"
 summary: "An example of a news item that is tied to a date."
 labels: "Events"
-areas: []
+show_on:
+  - home
 featured: false
 draft: false
 date_to_remember: true

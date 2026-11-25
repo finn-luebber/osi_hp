@@ -1,6 +1,6 @@
 # OSI Lübeck website (static version)
 
-**Version 1.2.0.**
+**Version 1.3.1.**
 
 The public website of the Open Science Initiative Lübeck, built as plain files from the content in this Git repository. It looks and reads exactly like the earlier PHP version; only the way content is stored and published changed.
 
@@ -49,6 +49,7 @@ Keep the main subject or face in the middle. JPG, PNG, WebP and GIF are accepted
 | Page | Address |
 |---|---|
 | Area | `/open-science/` |
+| Dates and events of an area | `/news/area/open-science/dates/` |
 | Box of an area | `/open-science/open-access/` (the file name) |
 | News item | `/news/title/` (the file name without the date) |
 | Dates and events | `/news/dates/` |
@@ -66,6 +67,7 @@ On the developer's machine, not on your servers:
 - **Code:** HTML of all pages checked with html-validate; all 1,251 internal links and jump marks resolve; accessibility audit (axe, WCAG 2.1 AA) without findings; no page wider than the screen at eight widths from 320 to 1920 pixels.
 - **Content mistakes:** odd picture names (spaces, umlauts, upper-case endings), unsafe link addresses, a last day before the first day, a missing date and a reserved box name are handled and reported; phone photos are turned upright and lose their location data.
 - **Editor:** under its security rule, against a local copy: uploading a picture, adding a news item with a date, picture, area and labels, a team member, a box with a link button, a point in an activity column, and editing an existing entry; every change appeared correctly after the build. The generated settings for GitHub and for GitLab were loaded in the editor without errors.
+- **Where news and dates appear ("Show on"):** tested with news for every combination (one place, several, all four, past dates, older files without the field, empty and wrong entries): the Upcoming box, latest-news box and Featured band of the homepage and of each area page, the area date lists, warnings in the build log, and tidying of passed dates in the browser. In the editor: Home preset, adding areas, removing Home, saving with no place refused.
 - **Automatic logout of the editor:** tested with a simulated clock: login kept on reload, notice two minutes before, "Stay logged in", logout after 30 minutes without activity, logout on closing the last editor tab, other editor tabs unaffected.
 - **GitHub login service:** tested with simulated GitHub answers: login without asking for broad access, refusal and withdrawal of keys for accounts without write access or where the app is not installed, refresh key never passed on, forged or cancelled logins refused.
 - **Not tested:** logging in through GitHub (with the GitHub App and login service) or GitLab against the real services, the GitHub workflow and GitLab pipeline themselves, GitHub/GitLab Pages, and the Apache and nginx rules.

@@ -4,8 +4,9 @@ date: "2026-06-18"
 image: "/uploads/award-call.png"
 image_alt: "Abstract pattern (demo picture)"
 labels: "News"
-areas:
-  - "open-science"
+show_on:
+  - home
+  - open-science
 featured: false
 draft: false
 ---
