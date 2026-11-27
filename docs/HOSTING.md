@@ -112,6 +112,24 @@ Editors then open `/admin/` (there is no link to it on the site; bookmark it) an
 
 ---
 
+## Importing the news of the old website (once)
+
+The repository starts without news. All posts of the old WordPress site at osi-luebeck.de, with their featured pictures and the pictures inside their texts, are copied over by an import that has to run where the old site can be reached:
+
+- **On GitHub:** Actions › **Import news from the old website** › **Run workflow** (the address of the old site is filled in). It saves the news to `content/news/`, the pictures to `content/uploads/`, and starts the build. Takes a few minutes.
+- **On your own computer:** `npm ci`, then `npm run import-old-site`, then commit and push.
+
+What the import does:
+- one news item per post, with the original date, title, text (links, bold, lists, headings), short summary, categories as labels, and the featured picture with its description;
+- pictures inside texts are downloaded in full size; links to other posts of the old site point to the same news on the new site;
+- every imported news item is shown on **Home**; assign the areas in the editor where it fits (Show on);
+- dates to remember (talks, deadlines) are not filled in, since the old site had no such fields; add them in the editor if wanted;
+- news that already exist in `content/news/` are left alone, so the import can be run again safely.
+
+It needs the old site's standard WordPress interface (`/wp-json/`). If the import stops with an error about it, that interface is switched off on the old site.
+
+Run the import **before** the old site is switched off or osi-luebeck.de is pointed to the new site.
+
 ## Legal pages
 
 - **Privacy policy:** the paragraph about visiting the website depends on the hosting. The build picks it by itself: GitHub Pages, GitLab Pages on gitlab.com, or a web server (your own server, or GitLab Pages on a university GitLab). For a web server, fill in its operator and how long its log files are kept in `content/pages/privacy-hosting.yml` (or in the editor under Page texts); until then the build log reminds you. To choose by hand, set the variable `OSI_HOSTING` to `github`, `gitlab_com` or `server`.

@@ -1,0 +1,48 @@
+---
+pagination:
+  data: site.team.members
+  size: 1
+  alias: member
+permalink: "{{ member.url }}"
+---
+{% extends "base.njk" %}
+{% set current = 'team' %}
+{% set pageTitle = member.name + ' – Team' %}
+{% set crumbs = [['/', 'Home'], ['/team/', 'Team'], [false, member.name]] %}
+{% block content %}
+<article>
+  <section class="osi-wrap osi-pagehead osi-pagehead--tight osi-profile">
+{%- if member.photo %}
+    <img class="osi-profile__photo" src="{{ member.photo.thumb }}" alt="Portrait of {{ member.name }}" width="{{ member.photo.width }}" height="{{ member.photo.height }}">
+{%- else %}
+    <span class="osi-profile__photo osi-member__photo--empty" aria-hidden="true"></span>
+{%- endif %}
+    <div class="osi-profile__text">
+      <div class="osi-label osi-label--accent"><a href="/team/">Team</a></div>
+      <h1>{{ member.name }}</h1>
+{%- if member.expertise %}
+      <p>{{ member.expertise }}</p>
+{%- endif %}
+{%- if member.institute %}
+      <div class="osi-member__where">{{ member.institute }}</div>
+{%- endif %}
+{%- if member.sections | length %}
+      <ul class="osi-chips">
+{%- for slug, isHead in member.sections %}
+        <li><a href="/{{ slug }}/">{{ site.sections[slug] }}{{ ' (head)' if isHead }}</a></li>
+{%- endfor %}
+      </ul>
+{%- endif %}
+    </div>
+  </section>
+
+  <section class="osi-wrap osi-subsection osi-article">
+{%- if member.about %}
+    <div class="osi-article__body osi-prose">
+{{ member.about | safe }}
+    </div>
+{%- endif %}
+    <p><a class="osi-link" href="/team/">Back to the team</a></p>
+  </section>
+</article>
+{% endblock %}

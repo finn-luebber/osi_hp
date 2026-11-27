@@ -1,6 +1,6 @@
 # OSI Lübeck website (static version)
 
-**Version 1.3.1.**
+**Version 1.8.0.** Contains five example news (titles start with “Example:”) and example About texts for the first three team members; replace or delete them in the editor. The news of the old website are brought in once with the import described in docs/HOSTING.md.
 
 The public website of the Open Science Initiative Lübeck, built as plain files from the content in this Git repository. It looks and reads exactly like the earlier PHP version; only the way content is stored and published changed.
 
@@ -50,6 +50,7 @@ Keep the main subject or face in the middle. JPG, PNG, WebP and GIF are accepted
 |---|---|
 | Area | `/open-science/` |
 | Dates and events of an area | `/news/area/open-science/dates/` |
+| Team member | `/team/<file name>/` |
 | Box of an area | `/open-science/open-access/` (the file name) |
 | News item | `/news/title/` (the file name without the date) |
 | Dates and events | `/news/dates/` |

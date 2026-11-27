@@ -23,7 +23,26 @@ permalink: "{{ card.url }}"
 {%- if card.picture %}
     <img class="osi-article__image" src="{{ card.picture.url }}" alt="{{ card.picture.alt }}" width="{{ card.picture.width }}" height="{{ card.picture.height }}">
 {%- endif %}
-{%- if card.body %}
+{%- if card.blocks %}
+{%- for b in card.blocks %}
+{%- if b.folds %}
+    <div class="osi-folds">
+{%- for section in b.folds %}
+      <details class="osi-fold" id="{{ section.id }}">
+        <summary class="osi-fold__head"><h2 class="osi-fold__title">{{ section.title | safe }}</h2><span class="osi-fold__icon" aria-hidden="true"></span></summary>
+        <div class="osi-fold__body osi-article__body osi-prose">
+{{ section.body | safe }}
+        </div>
+      </details>
+{%- endfor %}
+    </div>
+{%- else %}
+    <div class="osi-article__body osi-prose">
+{{ b.text | safe }}
+    </div>
+{%- endif %}
+{%- endfor %}
+{%- elif card.body %}
     <div class="osi-article__body osi-prose">
 {{ card.body | safe }}
     </div>

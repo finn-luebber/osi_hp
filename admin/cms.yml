@@ -40,6 +40,7 @@ _shared:
     - { label: "Summary", name: summary, widget: text, hint: "Shown in the box and as the introduction of the box’s page. Links: `[link text](https://address)`" }
     - { label: "Order", name: order, widget: number, value_type: int, default: 100, hint: "Lower numbers come first" }
     - { label: "Text of the box’s page", name: body, widget: markdown, required: false, buttons: [bold, italic, link, heading-two, bulleted-list], editor_components: [image] }
+    - { label: "Fold all subheadings into sections that open on click", name: fold_sections, widget: boolean, default: false, required: false, hint: "On: every subheading becomes a heading that readers click to open or close the text below it. Off: only subheadings that start with a plus sign fold, for example “+ Past talks” (in Markdown mode: ## + Past talks); the others stay normal subheadings." }
     - { label: "Picture (optional)", name: picture, widget: image, required: false, choose_url: false, hint: "Shown above the text. Best size 1600 × 900 pixels." }
     - { label: "Description of the picture", name: picture_alt, widget: string, required: false }
     - { label: "Link button: text (optional)", name: link_text, widget: string, required: false }
@@ -88,11 +89,12 @@ collections:
       - { label: "Name", name: name, widget: string }
       - { label: "Field of expertise", name: expertise, widget: text, required: false }
       - { label: "Institute", name: institute, widget: string, required: false }
-      - { label: "Portrait", name: photo, widget: image, required: false, choose_url: false, hint: "Square, 800 × 800 pixels, face in the middle" }
+      - { label: "Portrait", name: photo, widget: image, required: false, choose_url: false, hint: "Square, 800 × 800 pixels, face in the middle; shown as a circle" }
       - { label: "Order", name: order, widget: number, value_type: int, default: 100, hint: "Lower numbers come first" }
       - { label: "Open Science", name: area_open_science, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }], hint: "A member can belong to several areas and head more than one" }
       - { label: "Citizen Science", name: area_citizen_science, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }] }
       - { label: "Meta Science", name: area_metascience, widget: select, default: none, options: [{ label: "Not in this area", value: none }, { label: Member, value: member }, { label: Head, value: head }] }
+      - { label: "About", name: body, widget: markdown, required: false, buttons: [bold, italic, link, heading-two, bulleted-list], editor_components: [image], hint: "One or more paragraphs on background, motivation and research. Shown on the member’s own page, reached by clicking the name or portrait on the Team page." }
       - { label: "Hide from the site", name: hidden, widget: boolean, default: false, required: false }
 
   - { name: topics-open-science, label: "Open Science: boxes", label_singular: "box", folder: content/topics/open-science, create: true, slug: "{{slug}}", summary: "{{title}}", sortable_fields: [order, title], editor: { preview: false }, fields: *topic_fields }

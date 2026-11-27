@@ -40,3 +40,14 @@
     if (block.getAttribute('data-last') < today) { block.classList.add('osi-event__date--past'); }
   });
 })();
+
+// Fold-out sections: a link to a section (page#section) opens it.
+(function () {
+  function openFromHash() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    var target = id && document.getElementById(id);
+    if (target && target.tagName === 'DETAILS') { target.open = true; target.scrollIntoView(); }
+  }
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+})();

@@ -19,12 +19,14 @@ permalink: /team/
     <div class="osi-team">
 {%- for member in site.team.members %}
       <article class="osi-member">
+        <a class="osi-member__photo-link" href="{{ member.url }}" tabindex="-1" aria-hidden="true">
 {%- if member.photo %}
-        <img class="osi-member__photo" src="{{ member.photo.thumb }}" alt="Portrait of {{ member.name }}" width="{{ member.photo.width }}" height="{{ member.photo.height }}" loading="lazy">
+          <img class="osi-member__photo" src="{{ member.photo.thumb }}" alt="" width="{{ member.photo.width }}" height="{{ member.photo.height }}" loading="lazy">
 {%- else %}
-        <span class="osi-member__photo osi-member__photo--empty" aria-hidden="true"></span>
+          <span class="osi-member__photo osi-member__photo--empty"></span>
 {%- endif %}
-        <h2>{{ member.name }}</h2>
+        </a>
+        <h2><a href="{{ member.url }}">{{ member.name }}</a></h2>
 {%- if member.expertise %}
         <div class="osi-member__field">{{ member.expertise }}</div>
 {%- endif %}

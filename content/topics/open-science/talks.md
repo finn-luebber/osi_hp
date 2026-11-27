@@ -12,6 +12,9 @@ The Open Science Talks are our lecture series on open and reproducible research.
 
 New talks are announced in the news. See [all upcoming dates](/news/dates/).
 
-## Past talks
+## + Past talks
 
 [LIST OF PAST TALKS WITH SPEAKER, TOPIC AND, WHERE AVAILABLE, A RECORDING.]
+
+- [SPEAKER NAME]: [TITLE OF THE TALK] ([MONTH YEAR])
+- [SPEAKER NAME]: [TITLE OF THE TALK] ([MONTH YEAR])

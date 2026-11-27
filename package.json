@@ -1,19 +1,21 @@
 {
   "name": "osi-luebeck-website",
-  "version": "1.3.1",
+  "version": "1.8.0",
   "private": true,
   "description": "Static website of the Open Science Initiative Lübeck. Content lives in content/, the build writes the finished site to _site/. Runs on GitHub or GitLab, see docs/HOSTING.md.",
   "type": "module",
   "scripts": {
     "build": "eleventy",
     "start": "eleventy --serve --port=8080",
-    "cms": "decap-server"
+    "cms": "decap-server",
+    "import-old-site": "node tools/import-wordpress.js"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.7",
     "js-yaml": "5.5.0",
     "markdown-it": "14.3.3",
-    "sharp": "0.35.5"
+    "sharp": "0.35.5",
+    "turndown": "7.2.4"
   },
   "devDependencies": {
     "decap-server": "3.11.6"

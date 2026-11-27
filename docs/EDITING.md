@@ -23,12 +23,16 @@ About two minutes later:
 
 To show it in the large **Featured** band, switch on **Show in the Featured band**; it then appears in the band of every place chosen under **Show on**. A news item marked **Draft** is saved but not shown.
 
+## News brought over from the old website
+
+They are shown on **Home** only. Open each in **News** and add the areas under **Show on** where it fits; for past talks you can also add the date to remember.
+
 ## Other content
 
 | What | Where in the editor | Notes |
 |---|---|---|
-| Team member | **Team › + Team member** | For each area choose *not in this area*, *member* or *head*. Heads appear in the homepage columns and at the top of their area page. Portrait: square, 800 × 800 pixels. Lower **order** numbers come first. |
-| Box of an area | **Open Science: boxes** (and the other two) **› + box** | Title and summary show in the box; **Text of the box's page** is the box's own page. Order by the **order** number. |
+| Team member | **Team › + Team member** | For each area choose *not in this area*, *member* or *head*. Heads appear in the homepage columns and at the top of their area page. Portrait: square, 800 × 800 pixels, face in the middle; it is shown as a circle. **About**: one or more paragraphs on background, motivation and research, shown on the member's own page (`/team/<name>/`), which opens when the name or portrait on the Team page is clicked. Lower **order** numbers come first. |
+| Box of an area | **Open Science: boxes** (and the other two) **› + box** | Title and summary show in the box; **Text of the box's page** is the box's own page. Order by the **order** number. Subheadings can fold: the subheading and its text, up to the next subheading, become a section that readers click to open or close; open sections stay open until clicked again. **Single subheadings:** start the subheading with a plus sign, e.g. `+ Past talks` (in Markdown: `## + Past talks`); the plus sign is not shown. Other subheadings stay normal, so a page can mix both, or have no subheadings at all. **All subheadings:** switch on **Fold all subheadings into sections that open on click**. A link to a section opens it, e.g. `/open-science/open-access/#why-open-access`. |
 | Page texts | **Page texts › Homepage** etc. | All headlines and texts, activities and information boxes. Lists have **Add** buttons, a cross to remove, and can be dragged to reorder. |
 | Legal pages | **Page texts › Imprint / Privacy policy / Accessibility** | Update the date at the end when you change them. The accessibility statement should be reviewed once a year. |
 | Hosting part of the privacy policy | **Page texts › Privacy policy: hosting paragraph** | The website shows the paragraph that fits where it is hosted, by itself. |

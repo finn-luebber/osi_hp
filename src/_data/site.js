@@ -80,8 +80,8 @@ async function preparePictures() {
   const jobs = [];
   const taken = new Set();
   for (const file of listFiles(dir, '')) {
-    if (!/\.(jpe?g|png|webp|gif)$/i.test(file)) {
-      warn(`content/uploads/${file}`, 'not a JPG, PNG, WebP or GIF picture; ignored');
+    if (!/\.(jpe?g|png|webp|gif|svg)$/i.test(file)) {
+      warn(`content/uploads/${file}`, 'not a JPG, PNG, WebP, GIF or SVG picture; ignored');
       continue;
     }
     const stem = slugify(file.replace(/\.[^.]+$/, ''));
@@ -134,6 +134,43 @@ md.renderer.rules.image = (tokens, idx, options, env, self) => {
 const figures = (html) => html.replace(/<p>(<img [^>]*alt="([^"]*)"[^>]*>)<\/p>/g, (_, img, alt) => `<figure class="osi-figure">${img}${alt ? `<figcaption>${alt}</figcaption>` : ''}</figure>`);
 const inline = (text) => md.renderInline(str(text));
 const block = (text) => figures(md.render(str(text)));
+
+/* ---------- fold-out sections on the boxes' pages ---------- */
+
+/**
+ * Subheadings can fold: the subheading and the text after it, up to the next subheading,
+ * become a section that opens and closes when the heading is clicked.
+ * Which subheadings fold: all of them when "fold_sections" is on, otherwise those written
+ * with a plus sign first ("## + Past talks"). Everything else stays as normal text.
+ * Returns null when nothing folds, so the page is shown as plain text.
+ */
+function foldSections(html, foldAll, avoid) {
+  const parts = html.split(/(?=<h2>)/);
+  const used = new Set(avoid);
+  const blocks = [];
+  let folds = 0;
+  for (const part of parts) {
+    const m = part.match(/^<h2>([\s\S]*?)<\/h2>\s*([\s\S]*)$/);
+    const marked = m && /^\+\s*/.test(m[1]);
+    if (m && (foldAll || marked)) {
+      const title = m[1].replace(/^\+\s*/, '');
+      const base = slugify(title.replace(/<[^>]+>/g, ''));
+      let id = base;
+      for (let i = 2; used.has(id); i++) id = `${base}-${i}`;
+      used.add(id);
+      const last = blocks[blocks.length - 1];
+      const section = { id, title, body: m[2].trim() };
+      if (last && last.folds) last.folds.push(section); else blocks.push({ folds: [section] });
+      folds += 1;
+    } else if (part.trim()) {
+      // a "+" typed in front of a subheading that is not folded is not shown
+      const text = part.replace(/^<h2>\+\s*/, '<h2>').trim();
+      const last = blocks[blocks.length - 1];
+      if (last && last.text !== undefined) last.text += `\n${text}`; else blocks.push({ text });
+    }
+  }
+  return folds ? blocks : null;
+}
 
 /* ---------- pages ---------- */
 
@@ -194,7 +231,7 @@ export default async function () {
 
   /* team */
   const members = listFiles(path.join(CONTENT, 'team'), '.md').map((f) => {
-    const { meta, file } = readEntry(path.join(CONTENT, 'team', f));
+    const { meta, body, file } = readEntry(path.join(CONTENT, 'team', f));
     const sections = {};
     for (const area of Object.keys(SECTIONS)) {          // area_open_science: none | member | head
       const role = str(meta[`area_${area.replace(/-/g, '_')}`]);
@@ -204,8 +241,10 @@ export default async function () {
       if (SECTIONS[a?.area]) sections[a.area] = a.role === 'head';
     }
     return { name: str(meta.name), expertise: str(meta.expertise), institute: str(meta.institute), order: Number(meta.order) || 0,
-      photo: picture(meta.photo, file, `Portrait of ${str(meta.name)}`), sections, hidden: meta.hidden === true };
+      photo: picture(meta.photo, file, `Portrait of ${str(meta.name)}`), sections, hidden: meta.hidden === true,
+      slug: slugify(f.replace(/\.md$/, '')), about: block(body) };
   }).filter((m) => m.name && !m.hidden).sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
+  for (const m of members) m.url = `/team/${m.slug}/`;
   const membersFor = (area, headsOnly = false) => members.filter((m) => area in m.sections && (!headsOnly || m.sections[area]))
     .sort((a, b) => Number(b.sections[area]) - Number(a.sections[area]) || a.order - b.order || a.name.localeCompare(b.name));
 
@@ -289,7 +328,8 @@ export default async function () {
       let id = slugify(f.replace(/\.md$/, ''));
       if (RESERVED_IDS.includes(id)) id = `${id}-topic`;
       return { id, title: str(meta.title), summary: inline(meta.summary), order: Number(meta.order) || 0,
-        picture: picture(meta.picture, file, meta.picture_alt), link: linkOf(meta.link_url ? { text: meta.link_text, url: meta.link_url } : meta.link, file), body: block(body), area: slug, areaName: name, hidden: meta.hidden === true };
+        picture: picture(meta.picture, file, meta.picture_alt), link: linkOf(meta.link_url ? { text: meta.link_text, url: meta.link_url } : meta.link, file),
+        blocks: foldSections(block(body), meta.fold_sections === true, RESERVED_IDS), body: block(body), area: slug, areaName: name, hidden: meta.hidden === true };
     }).filter((t) => t.title && !t.hidden).sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
     for (const t of cards) t.url = `/${slug}/${t.id}/`;
     for (const t of cards) {
