@@ -1,5 +1,10 @@
 ---
-title: "GrantInq"
-summary: "An interactive app for simulating research funding. Set up how grant applications are selected, then compare scenarios by the quality of funded proposals, costs and fairness."
-order: 20
+title: Research on Funding Lotteries
+summary: In our research on funding systems we combine simulations and empirical
+  work to better understand current challenges and develop solutions for
+  resolving the pressure in current funding systems.
+order: 1
 ---
+**Simulations on Lotteries**
+
+Our GrantInq simulation can be accessed here. In this work, we do...

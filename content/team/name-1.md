@@ -1,11 +1,12 @@
 ---
-name: "[NAME 1]"
-expertise: "[FIELD OF EXPERTISE]"
-institute: "[INSTITUTE]"
-order: 10
-area_open_science: "head"
-area_citizen_science: "none"
-area_metascience: "member"
+name: Sören Krach
+expertise: Metascience, Funding, Citizen Science
+institute: Department of Psychiatry and Psychotherapy
+photo: /uploads/krach.jpg
+order: 1
+area_open_science: none
+area_citizen_science: head
+area_metascience: member
 ---
 
 *Example text – replace it with the member's own in the editor (Team › the member › About).*

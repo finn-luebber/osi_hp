@@ -1,66 +1,85 @@
 hero:
-  label: "Open Science Initiative Lübeck"
-  title: "Making science open, transparent and reproducible"
-  lead: "We are a grassroots movement from within the University of Lübeck. We collect what is happening on campus around open research, point to new developments and events, and run our own."
-  button: "Join the initiative"
-  more: "See what we work on"
+  label: Open Science Initiative Lübeck
+  title: Making science open, transparent and reproducible
+  lead: We are a grassroots movement from within the University of Lübeck. We
+    collect what is happening on campus around open research, point to new
+    developments and events, and run our own.
+  button: Join the initiative
+  more: See what we work on
 events_box:
-  title: "Upcoming events"
-  empty: "No upcoming events at the moment."
-  all: "All dates and events"
+  title: Upcoming events
+  empty: No upcoming events at the moment.
+  all: All dates and events
 pillars:
-  label: "Three areas"
-  title: "What the initiative brings together"
+  label: Three areas
+  title: What the initiative brings together
   open-science:
-    text: "The technical core: open access, open data and research data management, alongside our Open Science Talks and the award."
+    text: "The technical core: open access, open data and research data management,
+      alongside our Open Science Talks and the award."
   citizen-science:
-    text: "Science communication and participation: research with and for society, including citizen science in clinical research."
+    text: "Science communication and participation: research with and for society,
+      including citizen science in clinical research."
   metascience:
-    text: "Research on research. Studies and events that examine how the science system itself is structured, and how it could work better."
+    text: Research on research. Studies and events that examine how the science
+      system itself is structured, and how it could work better.
 news:
-  title: "Latest from OSI Lübeck"
+  title: Latest from OSI Lübeck
 activities:
-  label: "Activities"
-  title: "What we do"
+  label: Activities
+  title: What we do
   columns:
-    - title: "Teaching"
+    - title: Teaching
       points:
-        - "Contributions to courses in Clinical Psychology and Psychotherapy (MSc), Nutritional Medicine (MSc) and ProWiSP"
-        - "Supervision of theses"
-    - title: "Research"
+        - Contributions to courses in Clinical Psychology and Psychotherapy
+          (MSc), Nutritional Medicine (MSc) and ProWiSP
+        - Supervision of theses
+    - title: Research
       points:
-        - "Publications on open science and meta science, including in Nature, Nature Communications and Nature Human Behaviour"
-        - "Talks at scientific conferences and contributions to panel discussions"
-        - "Open science surveys on campus, with a report to the university leadership"
-    - title: "Culture"
+        - Publications on open science and meta science, including in Nature,
+          Nature Communications and Nature Human Behaviour
+        - Talks at scientific conferences and contributions to panel discussions
+        - Open science surveys on campus, with a report to the university
+          leadership
+    - title: Culture
       points:
-        - "Open Science Talks with guests such as Ulrich Dirnagl, Julia Rohrer, Elisabeth Bik and Amrei Bahr"
-        - "Co-organisation of the Studium Generale 2024/25, “UnWissenSchafft Rassismus”"
-        - "Open Science Awards"
-        - "Press coverage in Die Zeit, Times Higher Education, Spiegel and Tagesspiegel"
-    - title: "Funding and networks"
+        - Open Science Talks with guests such as Ulrich Dirnagl, Julia Rohrer,
+          Elisabeth Bik and Amrei Bahr
+        - Co-organisation of the Studium Generale 2024/25, “UnWissenSchafft
+          Rassismus”
+        - Open Science Awards
+        - Press coverage in Die Zeit, Times Higher Education, Spiegel and
+          Tagesspiegel
+    - title: Funding and network
       points:
-        - "Around €150,000 in third-party funding, raised through cooperations with foundations"
-        - "Local, national and international networking"
+        - "We are partially supported by the University of Lübeck and apply for
+          third party funding for our metascience research.   "
+        - We connect with national and international networks.
 boxes:
-  - label: "Office hour"
-    title: "Every last Friday of the month"
-    text: "Questions about preregistration, open data or anything else around open research? [Email us](mailto:open.science@uni-luebeck.de) to schedule a time in our Open Science office hour."
+  - label: Office hour
+    title: Every last Friday of the month
+    text: Questions about preregistration, open data or anything else around open
+      research? [Email us](mailto:open.science@uni-luebeck.de) to schedule a
+      time in our Open Science office hour.
     link:
-      text: "Book a slot by email"
-      url: "mailto:open.science@uni-luebeck.de"
-  - label: "Campus survey"
-    title: "What researchers say they need"
-    text: "Asked what it would take to publish more open access, respondents most often named funding (n = 118). For sharing more data, it was time and information (n = 134)."
+      text: Book a slot by email
+      url: mailto:open.science@uni-luebeck.de
+  - label: Campus survey
+    title: What researchers say they need
+    text: Asked what it would take to publish more open access, respondents most
+      often named funding (n = 118). For sharing more data, it was time and
+      information (n = 134).
     link:
       text: ""
       url: ""
-  - label: "Networks"
-    title: "Part of a wider movement"
-    text: "OSI Lübeck is a member of the Network of Open Science Initiatives (NOSI) and the German Reproducibility Network (GRN), which support universities and their staff in making science more reproducible and sustainable."
+  - label: Networks
+    title: Part of a wider movement
+    text: OSI Lübeck is a member of the Network of Open Science Initiatives (NOSI)
+      and the German Reproducibility Network (GRN), which support universities
+      and their staff in making science more reproducible and sustainable.
     link:
       text: ""
       url: ""
 join:
-  title: "Interested in open science? Just email us."
-  text: "We are open to interested people from all levels (students, PhDs, postdocs, professors) and all backgrounds at the University of Lübeck."
+  title: Interested in open science? Just email us.
+  text: We are open to interested people from all levels (students, PhDs,
+    postdocs, professors) and all backgrounds at the University of Lübeck.
